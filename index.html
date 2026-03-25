@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Punto de Indiferencia</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #0f766e;
+      --primary-soft: #dff7f3;
+      --warn: #b45309;
+      --warn-soft: #fff7db;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --ok: #166534;
+      --ok-soft: #dcfce7;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(15,118,110,0.08), transparent 24%),
+        linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+    }
+
+    .shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 30px 18px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.82;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.03;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: clamp(15px, 2vw, 18px);
+      line-height: 1.5;
+      max-width: 760px;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .info-box {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .step-box {
+      background: #F8F9FA;
+      border: 1px solid #E9ECEF;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .section {
+      padding: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section:first-child { border-top: 0; }
+
+    .grid-2,
+    .grid-3,
+    .metrics,
+    .summary-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3, .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: -2px;
+    }
+
+    .input {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 14px;
+      color: var(--text);
+      font-size: 16px;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .input:focus {
+      border-color: rgba(15,118,110,0.7);
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.10);
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 800;
+      line-height: 1.05;
+    }
+
+    .metric-delta {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .band {
+      border-radius: 18px;
+      padding: 16px 18px;
+      line-height: 1.55;
+      border: 1px solid transparent;
+      margin-top: 14px;
+    }
+
+    .band strong { display: block; margin-bottom: 4px; }
+    .band.ok { background: #e8f5e9; color: #166534; border-color: #cfe8d1; }
+    .band.warn { background: #fff8e1; color: #92400e; border-color: #f9d97e; }
+    .band.danger { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
+    .band.neutral { background: #f3f4f6; color: #374151; border-color: #e5e7eb; }
+
+    .status {
+      margin-top: 14px;
+      display: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .06s ease, opacity .18s ease, box-shadow .18s ease;
+    }
+
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 12px 24px rgba(15,118,110,0.20);
+    }
+    .btn-secondary {
+      background: #eef2f7;
+      color: #334155;
+      border: 1px solid #dbe3ee;
+    }
+
+    .report-box {
+      border: 1px solid #DDE5DB;
+      border-left: 6px solid #2E7D32;
+      background: #FCFCFC;
+      padding: 22px;
+      border-radius: 14px;
+      margin-top: 18px;
+      display: none;
+    }
+
+    .report-box h2 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1.08;
+    }
+
+    .report-box p {
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    .report-subtitle {
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 12px 0 18px;
+    }
+
+    .summary-caption {
+      color: var(--muted);
+      font-size: 15px;
+      margin-top: 16px;
+      margin-bottom: 10px;
+    }
+
+    .summary-item {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .summary-item b { font-weight: 800; }
+
+    .footer-note {
+      color: #7A7A7A;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .shell {
+        padding: 18px 14px 34px;
+      }
+
+      .grid-2,
+      .grid-3,
+      .metrics,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        border-radius: 22px;
+        padding: 22px 18px;
+      }
+
+      .section {
+        padding: 18px;
+      }
+    }
+
+    @media print {
+      body { background: white; }
+      .hero, .card > .section:not(.printable), .cta-row, .status, .footer-note { display: none !important; }
+      .card { box-shadow: none; border: 0; }
+      .report-box { display: block !important; border-color: #9ca3af; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <div class="eyebrow">Simulador gerencial</div>
+      <h1>Simulador de Punto de Indiferencia</h1>
+      <p>Calcula cuántas unidades necesitas vender para bajar precio sin sacrificar la utilidad bruta.</p>
+      <div class="info-box">
+        <strong>Uso sugerido:</strong> 1) ingresa los datos actuales, 2) escribe el nuevo precio deseado, 3) la plataforma calcula sola, 4) genera y descarga el reporte.
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section">
+        <div class="step-box">Paso 1. Ingresa los datos actuales del producto.</div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="producto">Producto o categoría</label>
+            <input id="producto" class="input" type="text" value="cualquier producto" />
+          </div>
+          <div class="field">
+            <label for="precioActual">Precio de venta actual</label>
+            <input id="precioActual" class="input" type="number" step="0.01" value="10.00" />
+            <div class="hint">Es el precio actual al que hoy vendes el producto.</div>
+          </div>
+          <div class="field">
+            <label for="unidadesActuales">Unidades vendidas actuales</label>
+            <input id="unidadesActuales" class="input" type="number" step="1" value="3000" />
+            <div class="hint">Cantidad actual vendida en el período que estás analizando.</div>
+          </div>
+          <div class="field">
+            <label for="margenActual">Margen bruto actual (%)</label>
+            <input id="margenActual" class="input" type="number" step="0.01" value="26.00" />
+            <div class="hint">Margen bruto estimado del producto en el escenario actual.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="step-box">Paso 2. Escribe el nuevo precio que quieres evaluar.</div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="nuevoPrecio">Nuevo precio propuesto</label>
+            <input id="nuevoPrecio" class="input" type="number" step="0.01" value="9.50" />
+            <div class="hint">La plataforma calculará automáticamente cuántas unidades debes vender para conservar la misma utilidad bruta.</div>
+          </div>
+          <div class="field">
+            <label for="autorReporte">Firma del reporte</label>
+            <input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section printable">
+        <div class="step-box">Paso 3. Revisa el cálculo automático y genera el reporte.</div>
+
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-label">Costo unitario estimado</div>
+            <div class="metric-value" id="metricCosto">$0.00</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Nuevo margen bruto</div>
+            <div class="metric-value" id="metricMargen">0.00%</div>
+            <div class="metric-delta" id="metricMargenDelta">0.00 pts</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Meta de unidades</div>
+            <div class="metric-value" id="metricUnidades">0</div>
+            <div class="metric-delta" id="metricVariacion">0.00% Vol.</div>
+          </div>
+        </div>
+
+        <div id="diagnostico"></div>
+
+        <div class="cta-row">
+          <button class="btn btn-primary" id="btnGenerar">📄 Generar reporte gerencial</button>
+          <button class="btn btn-secondary" id="btnDescargar">⬇️ Descargar reporte en PDF</button>
+        </div>
+
+        <div id="statusBox" class="status"></div>
+
+        <div id="reportBox" class="report-box">
+          <h2>Reporte Gerencial de Punto de Indiferencia</h2>
+          <div class="report-subtitle" id="reportAutor">Desarrollado por Jaime Loaiza</div>
+          <div class="divider"></div>
+
+          <p id="reportResumen"></p>
+
+          <div class="band ok" id="greenBox"></div>
+
+          <div class="band warn" id="yellowBox"></div>
+
+          <div class="summary-caption">Resumen técnico del escenario</div>
+          <div class="summary-grid">
+            <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
+            <div class="summary-item"><b>Nuevo precio:</b> <span id="sumNuevoPrecio"></span></div>
+            <div class="summary-item"><b>Precio actual:</b> <span id="sumPrecioActual"></span></div>
+            <div class="summary-item"><b>Costo unitario estimado:</b> <span id="sumCosto"></span></div>
+            <div class="summary-item"><b>Unidades actuales:</b> <span id="sumUnidades"></span></div>
+            <div class="summary-item"><b>Nuevo margen bruto:</b> <span id="sumMargenNuevo"></span></div>
+            <div class="summary-item"><b>Margen bruto actual:</b> <span id="sumMargenActual"></span></div>
+            <div class="summary-item"><b>Meta de unidades:</b> <span id="sumMeta"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">Simulador de Punto de Indiferencia | Developed by Jaime Loaiza</div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const els = {
+      producto: $("producto"),
+      precioActual: $("precioActual"),
+      unidadesActuales: $("unidadesActuales"),
+      margenActual: $("margenActual"),
+      nuevoPrecio: $("nuevoPrecio"),
+      autorReporte: $("autorReporte"),
+      metricCosto: $("metricCosto"),
+      metricMargen: $("metricMargen"),
+      metricMargenDelta: $("metricMargenDelta"),
+      metricUnidades: $("metricUnidades"),
+      metricVariacion: $("metricVariacion"),
+      diagnostico: $("diagnostico"),
+      btnGenerar: $("btnGenerar"),
+      btnDescargar: $("btnDescargar"),
+      statusBox: $("statusBox"),
+      reportBox: $("reportBox"),
+      reportAutor: $("reportAutor"),
+      reportResumen: $("reportResumen"),
+      greenBox: $("greenBox"),
+      yellowBox: $("yellowBox"),
+      sumProducto: $("sumProducto"),
+      sumNuevoPrecio: $("sumNuevoPrecio"),
+      sumPrecioActual: $("sumPrecioActual"),
+      sumCosto: $("sumCosto"),
+      sumUnidades: $("sumUnidades"),
+      sumMargenNuevo: $("sumMargenNuevo"),
+      sumMargenActual: $("sumMargenActual"),
+      sumMeta: $("sumMeta")
+    };
+
+    const fmtMoney = (value) => {
+      const n = Number(value || 0);
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(n);
+    };
+
+    const fmtUnits = (value) => {
+      const n = Number(value || 0);
+      return new Intl.NumberFormat("en-US", {
+        maximumFractionDigits: 0
+      }).format(Math.round(n));
+    };
+
+    function computeModel() {
+      const producto = els.producto.value.trim() || "cualquier producto";
+      const pActual = Number(els.precioActual.value || 0);
+      const qActual = Number(els.unidadesActuales.value || 0);
+      const margenActual = Number(els.margenActual.value || 0);
+      const nuevoPrecio = Number(els.nuevoPrecio.value || 0);
+      const autorReporte = els.autorReporte.value.trim() || "Desarrollado por Jaime Loaiza";
+
+      const costoUnitario = pActual * (1 - (margenActual / 100));
+      const utilidadObjetivo = qActual * (pActual - costoUnitario);
+      const gananciaNueva = nuevoPrecio - costoUnitario;
+      const nuevoMargen = nuevoPrecio > 0 ? (gananciaNueva / nuevoPrecio) * 100 : 0;
+
+      let qNecesaria = 0;
+      let variacionVol = 0;
+
+      if (gananciaNueva > 0 && qActual > 0) {
+        qNecesaria = utilidadObjetivo / gananciaNueva;
+        variacionVol = ((qNecesaria / qActual) - 1) * 100;
+      }
+
+      return {
+        producto,
+        pActual,
+        qActual,
+        margenActual,
+        nuevoPrecio,
+        autorReporte,
+        costoUnitario,
+        utilidadObjetivo,
+        gananciaNueva,
+        nuevoMargen,
+        qNecesaria,
+        variacionVol
+      };
+    }
+
+    function renderMainMetrics(data) {
+      els.metricCosto.textContent = fmtMoney(data.costoUnitario);
+      els.metricMargen.textContent = `${data.nuevoMargen.toFixed(2)}%`;
+      els.metricMargenDelta.textContent = `${(data.nuevoMargen - data.margenActual).toFixed(2)}% vs actual`;
+      els.metricUnidades.textContent = fmtUnits(data.qNecesaria);
+      els.metricVariacion.textContent = `${data.variacionVol.toFixed(2)}% Vol.`;
+    }
+
+    function renderDiagnosis(data) {
+      if (data.nuevoPrecio > data.costoUnitario) {
+        if (data.variacionVol <= 5) {
+          els.diagnostico.innerHTML = `<div class="band ok"><strong>🟢 Decisión altamente viable</strong>El crecimiento requerido es bajo y manejable comercialmente.</div>`;
+        } else if (data.variacionVol <= 15) {
+          els.diagnostico.innerHTML = `<div class="band warn"><strong>🟡 Decisión viable con gestión</strong>Se requiere un esfuerzo comercial relevante para sostener la rentabilidad.</div>`;
+        } else {
+          els.diagnostico.innerHTML = `<div class="band danger"><strong>🔴 Decisión de alto riesgo</strong>El crecimiento requerido es muy alto y puede no ser sostenible.</div>`;
+        }
+      } else {
+        els.diagnostico.innerHTML = `<div class="band danger"><strong>Precio no rentable</strong>El nuevo precio es igual o inferior al costo unitario estimado. Así no existe punto de indiferencia rentable, porque cada unidad deja utilidad bruta cero o negativa.</div>`;
+      }
+    }
+
+    function renderReport(data) {
+      els.reportAutor.textContent = data.autorReporte;
+      els.reportResumen.innerHTML = `
+        Para mantener la <strong>utilidad bruta</strong> que arrojan las unidades actuales a precios actuales, la cual es de
+        <strong>${fmtMoney(data.utilidadObjetivo)}</strong>, usted debe vender un total de <strong>${fmtUnits(data.qNecesaria)} unidades</strong>
+        con el fin de que la decisión de ajustar el precio a <strong>${fmtMoney(data.nuevoPrecio)}</strong> sea <strong>indiferente</strong>
+        para la rentabilidad de la compañía; es decir, que a pesar del cambio en el precio, el beneficio económico final en dinero permanezca inalterado.
+      `;
+
+      els.greenBox.innerHTML = `
+        <strong>Punto de indiferencia</strong>
+        Lograr este objetivo requiere un incremento del <b>${data.variacionVol.toFixed(2)}%</b> en el volumen de ventas.
+        Cualquier cifra por debajo de este cumplimiento resultará en una pérdida de valor frente al escenario base.
+      `;
+
+      els.yellowBox.innerHTML = `
+        <strong>Consejo Gerencial</strong>
+        Al mover precios y cantidades, el objetivo no debe ser solo "quedar igual", sino procurar producir una mayor cantidad de dinero para que el riesgo valga la pena.
+        Tenga en cuenta que este modelo es de utilidad bruta; no considera factores externos como el incremento en costos logísticos, operativos o de almacenamiento que implica vender un mayor volumen.
+      `;
+
+      els.sumProducto.textContent = data.producto;
+      els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
+      els.sumPrecioActual.textContent = fmtMoney(data.pActual);
+      els.sumCosto.textContent = fmtMoney(data.costoUnitario);
+      els.sumUnidades.textContent = fmtUnits(data.qActual);
+      els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
+      els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
+      els.sumMeta.textContent = fmtUnits(data.qNecesaria);
+
+      els.reportBox.style.display = "block";
+    }
+
+    function showStatus() {
+      els.statusBox.style.display = "block";
+      els.statusBox.innerHTML = `
+        Calculando punto de indiferencia...<br>
+        Preparando resumen ejecutivo...<br>
+        Generando versión descargable...
+      `;
+    }
+
+    function hideStatus() {
+      setTimeout(() => {
+        els.statusBox.style.display = "none";
+      }, 900);
+    }
+
+    function updateAll() {
+      const data = computeModel();
+      renderMainMetrics(data);
+      renderDiagnosis(data);
+      return data;
+    }
+
+    function generateReport() {
+      const data = updateAll();
+      showStatus();
+
+      setTimeout(() => {
+        if (data.nuevoPrecio <= data.costoUnitario) {
+          alert("No se puede generar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
+          hideStatus();
+          return;
+        }
+
+        renderReport(data);
+        hideStatus();
+        els.reportBox.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 700);
+    }
+
+    function downloadPdf() {
+      const data = updateAll();
+      if (data.nuevoPrecio <= data.costoUnitario) {
+        alert("No se puede descargar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
+        return;
+      }
+
+      renderReport(data);
+      setTimeout(() => window.print(), 120);
+    }
+
+    [els.producto, els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.autorReporte]
+      .forEach(el => el.addEventListener('input', updateAll));
+
+    els.btnGenerar.addEventListener('click', generateReport);
+    els.btnDescargar.addEventListener('click', downloadPdf);
+
+    updateAll();
+  </script>
+</body>
+</html>
