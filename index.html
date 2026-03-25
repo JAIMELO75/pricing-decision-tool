@@ -655,6 +655,7 @@
 
     function updateAll() {
       const data = computeModel();
+      console.log("DATA", data);
       renderMainMetrics(data);
       renderDiagnosis(data);
       return data;
@@ -695,13 +696,7 @@
     els.btnDescargar.addEventListener('click', downloadPdf);
 
     updateAll();
-    [els.producto, els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.autorReporte]
-  .forEach(el => el.addEventListener('input', updateAll));
-
-els.btnGenerar.addEventListener('click', generateReport);
-els.btnDescargar.addEventListener('click', downloadPdf);
-
-updateAll();
+    
   </script>
 </body>
 </html>
