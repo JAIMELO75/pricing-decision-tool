@@ -597,11 +597,6 @@
           <strong>${diagnosisTitle}</strong>
           El volumen requerido excede la capacidad comercial razonable para este escenario. La decisión debe tratarse como estructural y no como un simple ajuste táctico de precio.
         `;
-      } else {
-        els.diagnosisBox.innerHTML = `
-          <strong>${diagnosisTitle}</strong>
-          El volumen requerido excede la capacidad comercial razonable para este escenario y exige una evaluación ejecutiva antes de ejecutar la decisión.
-        `;
       }
 
       if (data.variacionVol <= 6 && data.nuevoPrecio > data.costoUnitario) {
