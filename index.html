@@ -629,11 +629,11 @@ function renderReport(data) {
   els.impactUb.textContent = fmtMoney(data.utilidadObjetivo);
 
     
-    <strong>Límite estratégico</strong>
-    Precio mínimo sin entrar en zona estructural: <b>${fmtMoney(data.precioLimiteEstructural)}</b>.<br><br>
-    Por debajo de este nivel, el volumen requerido deja de ser comercialmente razonable y el descuento empieza a exigir más que compromiso: exige cambios de fondo.
-  `;
-
+    els.strategyLimitBox.innerHTML = `
+  <strong>Límite estratégico</strong>
+  Precio mínimo sin entrar en zona estructural: <b>${fmtMoney(data.precioLimiteEstructural)}</b>.<br><br>
+  Por debajo de este nivel, el volumen requerido deja de ser comercialmente razonable y el descuento empieza a exigir más que compromiso: exige cambios de fondo.
+`;
   els.diagnosisBox.className = `band ${headlineClass}`;
   els.diagnosisBox.innerHTML = `
     <strong>Diagnóstico</strong>
