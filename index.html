@@ -565,74 +565,71 @@
         els.diagnostico.innerHTML = `<div class="band danger"><strong>Precio no rentable</strong>El nuevo precio es igual o inferior al costo unitario estimado. Así no existe punto de indiferencia rentable, porque cada unidad deja utilidad bruta cero o negativa.</div>`;
       }
     }
+function renderReport(data) {
+  let headlineClass = "neutral";
+  let decisionText = "";
+  let diagnosisText = "";
 
-    function renderReport(data) {
-      let decisionText = "";
-      let diagnosisClass = "neutral";
-      let diagnosisTitle = "Diagnóstico";
-      let headlineClass = "neutral";
+  if (data.nuevoPrecio <= data.costoUnitario) {
+    headlineClass = "danger";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → No viable`;
+    diagnosisText = "El precio propuesto está igual o por debajo del costo unitario estimado. En este escenario, cada unidad adicional destruye valor.";
+  } else if (data.variacionVol <= 6) {
+    headlineClass = "ok";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Viable en zona óptima`;
+    diagnosisText = "La exigencia de volumen se mantiene dentro de un rango absorbible por la dinámica normal del negocio.";
+  } else if (data.variacionVol <= 12) {
+    headlineClass = "warn";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Viable con gestión`;
+    diagnosisText = "La decisión exige gestión comercial activa, seguimiento quincenal y vigilancia estricta del cumplimiento de volumen.";
+  } else if (data.variacionVol <= 18) {
+    headlineClass = "warn";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Exigente`;
+    diagnosisText = "El esfuerzo requerido es alto y demanda palancas adicionales en precio, promoción, cobertura o disciplina de canal.";
+  } else {
+    headlineClass = "danger";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Estructural`;
+    diagnosisText = "El volumen requerido excede la capacidad comercial razonable. La decisión debe tratarse como estructural y no como un simple ajuste táctico de precio.";
+  }
 
-      if (data.nuevoPrecio <= data.costoUnitario) {
-        els.diagnosisBox.innerHTML = `
-          <strong>${diagnosisTitle}</strong>
-          El precio propuesto se ubica igual o por debajo del costo unitario estimado. En este escenario, cada unidad adicional profundiza la pérdida de valor frente a la base actual.
-        `;
-      } else if (data.variacionVol <= 6) {
-        els.diagnosisBox.innerHTML = `
-          <strong>${diagnosisTitle}</strong>
-          La exigencia de volumen se mantiene dentro de un rango absorbible por la dinámica normal del negocio. La decisión es ejecutable con disciplina comercial estándar.
-        `;
-      } else if (data.variacionVol <= 12) {
-        els.diagnosisBox.innerHTML = `
-          <strong>${diagnosisTitle}</strong>
-          La decisión es viable, pero exige gestión comercial activa, seguimiento quincenal y vigilancia estricta del cumplimiento de volumen.
-        `;
-      } else if (data.variacionVol <= 18) {
-        els.diagnosisBox.innerHTML = `
-          <strong>${diagnosisTitle}</strong>
-          El esfuerzo requerido es alto. La ejecución demanda palancas adicionales en precio, promoción, cobertura o disciplina de canal para sostener la rentabilidad.
-        `;
-      } else {
-        els.diagnosisBox.innerHTML = `
-          <strong>${diagnosisTitle}</strong>
-          El volumen requerido excede la capacidad comercial razonable para este escenario. La decisión debe tratarse como estructural y no como un simple ajuste táctico de precio.
-        `;
-      }
+  els.headlineBox.className = `band ${headlineClass}`;
+  els.headlineBox.innerHTML = `<strong>${decisionText}</strong>`;
 
-      if (data.variacionVol <= 6 && data.nuevoPrecio > data.costoUnitario) {
-        els.ruleBox.innerHTML = `
-          <strong>Regla gerencial</strong>
-          La decisión es absorbible por la dinámica normal del negocio. Puede ejecutarse siempre que exista seguimiento riguroso al cumplimiento del volumen objetivo.
-        `;
-      } else if (data.variacionVol <= 12 && data.nuevoPrecio > data.costoUnitario) {
-        els.ruleBox.innerHTML = `
-          <strong>Regla gerencial</strong>
-          La decisión solo se sostiene con gestión activa. Si en la revisión quincenal no se confirma la trayectoria de cumplimiento, debe reconsiderarse el ajuste de precio.
-        `;
-      } else if (data.variacionVol <= 18 && data.nuevoPrecio > data.costoUnitario) {
-        els.ruleBox.innerHTML = `
-          <strong>Regla gerencial</strong>
-          La decisión exige compromiso máximo. No debe ejecutarse sin responsables claros, revisión frecuente y un plan comercial explícito para capturar el volumen requerido.
-        `;
-      } else {
-        els.ruleBox.innerHTML = `
-          <strong>Regla gerencial</strong>
-          No basta con aspirar a mantener la utilidad. Si el mercado no confirma el volumen requerido, la decisión debe revertirse para evitar profundizar la destrucción de valor.
-        `;
-      }
+  els.reportAutor.textContent = data.autorReporte;
 
-      els.sumProducto.textContent = data.producto;
-      els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
-      els.sumPrecioActual.textContent = fmtMoney(data.pActual);
-      els.sumCosto.textContent = fmtMoney(data.costoUnitario);
-      els.sumUnidades.textContent = fmtUnits(data.qActual);
-      els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
-      els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
-      els.sumMeta.textContent = fmtUnits(data.qNecesaria);
+  // 🔥 AQUÍ SE LLENAN LOS NÚMEROS QUE HOY TE SALEN EN CERO
+  els.impactUnits.textContent = fmtUnits(data.qNecesaria);
+  els.impactVariation.textContent = `${data.variacionVol.toFixed(2)}% vs base actual`;
+  els.impactUb.textContent = fmtMoney(data.utilidadObjetivo);
 
-      els.reportBox.style.display = "block";
-    }
+  els.strategyLimitBox.innerHTML = `
+    <strong>Límite estratégico</strong>
+    Precio mínimo sin entrar en zona estructural: <b>${fmtMoney(data.precioLimiteEstructural)}</b>.
+  `;
 
+  els.diagnosisBox.className = `band ${headlineClass}`;
+  els.diagnosisBox.innerHTML = `
+    <strong>Diagnóstico</strong>
+    ${diagnosisText}
+  `;
+
+  els.ruleBox.className = "band neutral";
+  els.ruleBox.innerHTML = `
+    <strong>Lectura gerencial</strong>
+    Si el volumen requerido no se confirma en la ejecución, la decisión debe revisarse o revertirse.
+  `;
+
+  els.sumProducto.textContent = data.producto;
+  els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
+  els.sumPrecioActual.textContent = fmtMoney(data.pActual);
+  els.sumCosto.textContent = fmtMoney(data.costoUnitario);
+  els.sumUnidades.textContent = fmtUnits(data.qActual);
+  els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
+  els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
+  els.sumMeta.textContent = fmtUnits(data.qNecesaria);
+
+  els.reportBox.style.display = "block";
+}
     function showStatus() {
       els.statusBox.style.display = "block";
       els.statusBox.innerHTML = `
