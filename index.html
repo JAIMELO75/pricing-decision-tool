@@ -695,6 +695,13 @@
     els.btnDescargar.addEventListener('click', downloadPdf);
 
     updateAll();
+    [els.producto, els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.autorReporte]
+  .forEach(el => el.addEventListener('input', updateAll));
+
+els.btnGenerar.addEventListener('click', generateReport);
+els.btnDescargar.addEventListener('click', downloadPdf);
+
+updateAll();
   </script>
 </body>
 </html>
