@@ -232,19 +232,21 @@
     }
 
     .report-box {
-      border: 1px solid #DDE5DB;
-      border-left: 6px solid #2E7D32;
-      background: #FCFCFC;
-      padding: 22px;
-      border-radius: 14px;
-      margin-top: 18px;
+      border: 1px solid #d7e2da;
+      border-left: 8px solid #2E7D32;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcfb 100%);
+      padding: 28px;
+      border-radius: 18px;
+      margin-top: 20px;
       display: none;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
     }
 
     .report-box h2 {
       margin: 0 0 8px;
-      font-size: clamp(24px, 4vw, 34px);
-      line-height: 1.08;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.04;
+      letter-spacing: -0.02em;
     }
 
     .report-box p {
@@ -254,9 +256,9 @@
 
     .report-subtitle {
       color: var(--muted);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .divider {
@@ -266,10 +268,11 @@
     }
 
     .summary-caption {
-      color: var(--muted);
+      color: #667085;
       font-size: 15px;
-      margin-top: 16px;
-      margin-bottom: 10px;
+      margin-top: 18px;
+      margin-bottom: 12px;
+      font-weight: 700;
     }
 
     .summary-item {
@@ -361,10 +364,12 @@
             <input id="nuevoPrecio" class="input" type="number" step="0.01" value="9.50" />
             <div class="hint">La plataforma calculará automáticamente cuántas unidades debes vender para conservar la misma utilidad bruta.</div>
           </div>
-          <div class="field">
-            <label for="autorReporte">Firma del reporte</label>
-            <input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" />
-          </div>
+        </div>
+        <div style="height:14px"></div>
+        <div class="field">
+          <label for="autorReporte">Firma del reporte</label>
+          <input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" />
+          <div class="hint">Usa este campo para identificar la decisión, el período o el destinatario del informe.</div>
         </div>
       </div>
 
@@ -398,15 +403,30 @@
         <div id="statusBox" class="status"></div>
 
         <div id="reportBox" class="report-box">
+          <div class="band neutral" id="headlineBox" style="margin-top:0; margin-bottom:16px;"></div>
+
           <h2>Reporte Gerencial de Punto de Indiferencia</h2>
           <div class="report-subtitle" id="reportAutor">Desarrollado por Jaime Loaiza</div>
           <div class="divider"></div>
 
-          <p id="reportResumen"></p>
+          <div class="summary-grid" style="margin-bottom:16px;">
+            <div class="metric">
+              <div class="metric-label">Impacto clave</div>
+              <div class="metric-value" id="impactUnits">0</div>
+              <div class="metric-delta" id="impactVariation">0.00% vs base actual</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Utilidad bruta a preservar</div>
+              <div class="metric-value" id="impactUb">$0.00</div>
+              <div class="metric-delta">Referencia económica actual</div>
+            </div>
+          </div>
 
-          <div class="band ok" id="greenBox"></div>
+          <div class="band warn" id="strategyLimitBox"></div>
 
-          <div class="band warn" id="yellowBox"></div>
+          <div class="band" id="diagnosisBox"></div>
+
+          <div class="band neutral" id="ruleBox"></div>
 
           <div class="summary-caption">Resumen técnico del escenario</div>
           <div class="summary-grid">
@@ -417,7 +437,7 @@
             <div class="summary-item"><b>Unidades actuales:</b> <span id="sumUnidades"></span></div>
             <div class="summary-item"><b>Nuevo margen bruto:</b> <span id="sumMargenNuevo"></span></div>
             <div class="summary-item"><b>Margen bruto actual:</b> <span id="sumMargenActual"></span></div>
-            <div class="summary-item"><b>Meta de unidades:</b> <span id="sumMeta"></span></div>
+            <div class="summary-item"><b>Meta requerida:</b> <span id="sumMeta"></span></div>
           </div>
         </div>
       </div>
@@ -457,7 +477,14 @@
       sumUnidades: $("sumUnidades"),
       sumMargenNuevo: $("sumMargenNuevo"),
       sumMargenActual: $("sumMargenActual"),
-      sumMeta: $("sumMeta")
+      sumMeta: $("sumMeta"),
+      headlineBox: $("headlineBox"),
+      impactUnits: $("impactUnits"),
+      impactVariation: $("impactVariation"),
+      impactUb: $("impactUb"),
+      strategyLimitBox: $("strategyLimitBox"),
+      diagnosisBox: $("diagnosisBox"),
+      ruleBox: $("ruleBox")
     };
 
     const fmtMoney = (value) => {
@@ -498,6 +525,8 @@
         variacionVol = ((qNecesaria / qActual) - 1) * 100;
       }
 
+      const precioLimiteEstructural = qActual > 0 ? (utilidadObjetivo / (qActual * 1.18)) + costoUnitario : 0;
+
       return {
         producto,
         pActual,
@@ -510,7 +539,8 @@
         gananciaNueva,
         nuevoMargen,
         qNecesaria,
-        variacionVol
+        variacionVol,
+        precioLimiteEstructural
       };
     }
 
@@ -537,25 +567,64 @@
     }
 
     function renderReport(data) {
-      els.reportAutor.textContent = data.autorReporte;
-      els.reportResumen.innerHTML = `
-        Para mantener la <strong>utilidad bruta</strong> que arrojan las unidades actuales a precios actuales, la cual es de
-        <strong>${fmtMoney(data.utilidadObjetivo)}</strong>, usted debe vender un total de <strong>${fmtUnits(data.qNecesaria)} unidades</strong>
-        con el fin de que la decisión de ajustar el precio a <strong>${fmtMoney(data.nuevoPrecio)}</strong> sea <strong>indiferente</strong>
-        para la rentabilidad de la compañía; es decir, que a pesar del cambio en el precio, el beneficio económico final en dinero permanezca inalterado.
-      `;
+      let decisionText = "";
+      let diagnosisClass = "neutral";
+      let diagnosisTitle = "Diagnóstico";
+      let headlineClass = "neutral";
 
-      els.greenBox.innerHTML = `
-        <strong>Punto de indiferencia</strong>
-        Lograr este objetivo requiere un incremento del <b>${data.variacionVol.toFixed(2)}%</b> en el volumen de ventas.
-        Cualquier cifra por debajo de este cumplimiento resultará en una pérdida de valor frente al escenario base.
-      `;
+      if (data.nuevoPrecio <= data.costoUnitario) {
+        els.diagnosisBox.innerHTML = `
+          <strong>${diagnosisTitle}</strong>
+          El precio propuesto se ubica igual o por debajo del costo unitario estimado. En este escenario, cada unidad adicional profundiza la pérdida de valor frente a la base actual.
+        `;
+      } else if (data.variacionVol <= 6) {
+        els.diagnosisBox.innerHTML = `
+          <strong>${diagnosisTitle}</strong>
+          La exigencia de volumen se mantiene dentro de un rango absorbible por la dinámica normal del negocio. La decisión es ejecutable con disciplina comercial estándar.
+        `;
+      } else if (data.variacionVol <= 12) {
+        els.diagnosisBox.innerHTML = `
+          <strong>${diagnosisTitle}</strong>
+          La decisión es viable, pero exige gestión comercial activa, seguimiento quincenal y vigilancia estricta del cumplimiento de volumen.
+        `;
+      } else if (data.variacionVol <= 18) {
+        els.diagnosisBox.innerHTML = `
+          <strong>${diagnosisTitle}</strong>
+          El esfuerzo requerido es alto. La ejecución demanda palancas adicionales en precio, promoción, cobertura o disciplina de canal para sostener la rentabilidad.
+        `;
+      } else {
+        els.diagnosisBox.innerHTML = `
+          <strong>${diagnosisTitle}</strong>
+          El volumen requerido excede la capacidad comercial razonable para este escenario. La decisión debe tratarse como estructural y no como un simple ajuste táctico de precio.
+        `;
+      } else {
+        els.diagnosisBox.innerHTML = `
+          <strong>${diagnosisTitle}</strong>
+          El volumen requerido excede la capacidad comercial razonable para este escenario y exige una evaluación ejecutiva antes de ejecutar la decisión.
+        `;
+      }
 
-      els.yellowBox.innerHTML = `
-        <strong>Consejo Gerencial</strong>
-        Al mover precios y cantidades, el objetivo no debe ser solo "quedar igual", sino procurar producir una mayor cantidad de dinero para que el riesgo valga la pena.
-        Tenga en cuenta que este modelo es de utilidad bruta; no considera factores externos como el incremento en costos logísticos, operativos o de almacenamiento que implica vender un mayor volumen.
-      `;
+      if (data.variacionVol <= 6 && data.nuevoPrecio > data.costoUnitario) {
+        els.ruleBox.innerHTML = `
+          <strong>Regla gerencial</strong>
+          La decisión es absorbible por la dinámica normal del negocio. Puede ejecutarse siempre que exista seguimiento riguroso al cumplimiento del volumen objetivo.
+        `;
+      } else if (data.variacionVol <= 12 && data.nuevoPrecio > data.costoUnitario) {
+        els.ruleBox.innerHTML = `
+          <strong>Regla gerencial</strong>
+          La decisión solo se sostiene con gestión activa. Si en la revisión quincenal no se confirma la trayectoria de cumplimiento, debe reconsiderarse el ajuste de precio.
+        `;
+      } else if (data.variacionVol <= 18 && data.nuevoPrecio > data.costoUnitario) {
+        els.ruleBox.innerHTML = `
+          <strong>Regla gerencial</strong>
+          La decisión exige compromiso máximo. No debe ejecutarse sin responsables claros, revisión frecuente y un plan comercial explícito para capturar el volumen requerido.
+        `;
+      } else {
+        els.ruleBox.innerHTML = `
+          <strong>Regla gerencial</strong>
+          No basta con aspirar a mantener la utilidad. Si el mercado no confirma el volumen requerido, la decisión debe revertirse para evitar profundizar la destrucción de valor.
+        `;
+      }
 
       els.sumProducto.textContent = data.producto;
       els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
