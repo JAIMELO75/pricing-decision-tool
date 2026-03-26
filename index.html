@@ -680,7 +680,14 @@ function renderReport(data) {
 
   els.reportBox.style.display = "block";
 }
-    function showStatus() {
+      function showStatus() {
+  els.statusBox.style.display = "block";
+  els.statusBox.innerHTML = `
+    Calculando punto de indiferencia...<br>
+    Preparando resumen ejecutivo...<br>
+    Generando versión descargable...
+  `;
+}
       els.statusBox.style.display = "block";
       els.statusBox.innerHTML = `
         Calculando punto de indiferencia...<br>
@@ -689,7 +696,11 @@ function renderReport(data) {
       `;
     }
 
-    function hideStatus() {
+   function hideStatus() {
+  setTimeout(() => {
+    els.statusBox.style.display = "none";
+  }, 900);
+}
       setTimeout(() => {
         els.statusBox.style.display = "none";
       }, 900);
@@ -697,7 +708,6 @@ function renderReport(data) {
 
     function updateAll() {
       const data = computeModel();
-      console.log("DATA", data);
       renderMainMetrics(data);
       renderDiagnosis(data);
       return data;
