@@ -141,22 +141,40 @@
       </div>
 
       <div id="reportBox" class="report-box">
-        <h2 style="margin-top:20px;">Reporte Gerencial de Punto de Indiferencia</h2>
-        <div id="reportAutor" style="font-weight:800; color:var(--muted); font-size: 14px;"></div>
-        <hr style="border: 0; border-top: 1px solid var(--line); margin: 20px 0;">
+        <h2 style="margin-top:10px; color: #0f766e; border-bottom: 3px solid #0f766e; padding-bottom: 10px;">📊 Reporte Gerencial: Punto de Indiferencia</h2>
+        <div id="reportAutor" style="font-weight:800; color:var(--muted); font-size: 14px; margin-top: 5px;"></div>
         
-        <div class="summary-grid">
-          <div class="metric">
+        <div class="summary-grid" style="margin-top: 25px;">
+          <div class="metric" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
             <div class="metric-label">Ventas Actuales (Base)</div>
-            <div id="impactUnitsActual" class="metric-value">0</div>
-            <div class="metric-delta">Unidades sin ajustar</div>
+            <div id="impactUnitsActual" class="metric-value" style="color: #475569;">0</div>
+            <div class="metric-delta">Situación inicial</div>
           </div>
-          <div class="metric">
-            <div class="metric-label">Nueva Meta Requerida</div>
-            <div id="impactUnits" class="metric-value">0</div>
-            <div id="impactVariation" class="metric-delta">0% vs base</div>
+          <div class="metric" style="background-color: #f0fdf4; border: 1px solid #bbf7d0;">
+            <div class="metric-label" style="color: #166534;">Nueva Meta Requerida</div>
+            <div id="impactUnits" class="metric-value" style="color: #166534;">0</div>
+            <div id="impactVariation" class="metric-delta" style="color: #15803d;">0% de crecimiento</div>
           </div>
         </div>
+
+        <div id="diagnosisBox" class="band" style="font-size: 16px; padding: 20px;"></div>
+        <div id="ruleBox" class="band neutral" style="border-left: 5px solid #64748b; background-color: #f1f5f9;"></div>
+        
+        <h3 style="margin-top:35px; color: #334155; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">📋 Resumen Técnico Comparativo</h3>
+        <div class="summary-grid">
+          <div class="summary-item"><b>📦 Producto:</b> <br><span id="sumProducto"></span></div>
+          <div class="summary-item"><b>🧪 Costo Unitario:</b> <br><span id="sumCosto"></span></div>
+          
+          <div class="summary-item" style="border-left: 3px solid #cbd5e1; padding-left: 10px;"><b>💰 Precio Anterior:</b> <br><span id="sumPrecioActual"></span></div>
+          <div class="summary-item" style="border-left: 3px solid #0f766e; padding-left: 10px; color: #0f766e;"><b>🚀 Nuevo Precio:</b> <br><span id="sumNuevoPrecio" style="font-weight: bold;"></span></div>
+          
+          <div class="summary-item" style="border-left: 3px solid #cbd5e1; padding-left: 10px;"><b>📉 Margen Anterior:</b> <br><span id="sumMargenActual"></span></div>
+          <div class="summary-item" style="border-left: 3px solid #0f766e; padding-left: 10px; color: #0f766e;"><b>📈 Margen Nuevo:</b> <br><span id="sumMargenNuevo" style="font-weight: bold;"></span></div>
+          
+          <div class="summary-item" style="border-left: 3px solid #cbd5e1; padding-left: 10px;"><b>👥 Unidades Base:</b> <br><span id="sumUnidades"></span></div>
+          <div class="summary-item" style="border-left: 3px solid #0f766e; padding-left: 10px; color: #0f766e;"><b>🎯 Meta de Unidades:</b> <br><span id="sumMeta" style="font-weight: bold;"></span></div>
+        </div>
+      </div>
 
         <div id="diagnosisBox" class="band"></div>
         <div id="ruleBox" class="band neutral"></div>
