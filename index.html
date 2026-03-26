@@ -13,12 +13,6 @@
       --line: #e5e7eb;
       --primary: #0f766e;
       --primary-soft: #dff7f3;
-      --warn: #b45309;
-      --warn-soft: #fff7db;
-      --danger: #b91c1c;
-      --danger-soft: #fee2e2;
-      --ok: #166534;
-      --ok-soft: #dcfce7;
       --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
       --radius: 18px;
     }
@@ -26,18 +20,12 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(15,118,110,0.08), transparent 24%),
-        linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+      background: radial-gradient(circle at top left, rgba(15,118,110,0.08), transparent 24%), linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
     }
 
-    .shell {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 30px 18px 48px;
-    }
+    .shell { max-width: 980px; margin: 0 auto; padding: 30px 18px 48px; }
 
     .hero {
       background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
@@ -48,27 +36,8 @@
       margin-bottom: 18px;
     }
 
-    .eyebrow {
-      font-size: 12px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      opacity: 0.82;
-      margin-bottom: 10px;
-    }
-
-    .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(30px, 4vw, 46px);
-      line-height: 1.03;
-    }
-
-    .hero p {
-      margin: 0;
-      font-size: clamp(15px, 2vw, 18px);
-      line-height: 1.5;
-      max-width: 760px;
-      color: rgba(255,255,255,0.92);
-    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(30px, 4vw, 46px); line-height: 1.03; }
+    .hero p { margin: 0; font-size: clamp(15px, 2vw, 18px); color: rgba(255,255,255,0.92); }
 
     .info-box {
       margin-top: 18px;
@@ -77,827 +46,223 @@
       border-radius: 16px;
       padding: 14px 16px;
       font-size: 14px;
-      line-height: 1.5;
     }
 
-    .step-box {
-      background: #F8F9FA;
-      border: 1px solid #E9ECEF;
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 14px;
-      font-weight: 700;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .section {
-      padding: 22px;
-      border-top: 1px solid var(--line);
-    }
-
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
+    .section { padding: 22px; border-top: 1px solid var(--line); }
     .section:first-child { border-top: 0; }
 
-    .grid-2,
-    .grid-3,
-    .metrics,
-    .summary-grid {
-      display: grid;
-      gap: 14px;
-    }
+    .step-box { background: #F8F9FA; border: 1px solid #E9ECEF; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; font-weight: 700; }
 
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3, .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .field label { font-size: 14px; font-weight: 700; }
+    .input { width: 100%; border: 1px solid #d1d5db; border-radius: 14px; padding: 14px; font-size: 16px; outline: none; }
+    .input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(15,118,110,0.1); }
+    .hint { color: var(--muted); font-size: 12px; }
 
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .metric { border: 1px solid var(--line); border-radius: 18px; padding: 16px; background: #fff; }
+    .metric-label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    .metric-value { font-size: 24px; font-weight: 800; }
+    .metric-delta { margin-top: 8px; font-size: 13px; color: var(--muted); }
 
-    .field label {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .hint {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: -2px;
-    }
-
-    .input {
-      width: 100%;
-      border: 1px solid #d1d5db;
-      background: #fff;
-      border-radius: 14px;
-      padding: 14px 14px;
-      color: var(--text);
-      font-size: 16px;
-      outline: none;
-      transition: border-color .18s ease, box-shadow .18s ease;
-    }
-
-    .input:focus {
-      border-color: rgba(15,118,110,0.7);
-      box-shadow: 0 0 0 4px rgba(15,118,110,0.10);
-    }
-
-    .metric {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
-    }
-
-    .metric-label {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    .metric-value {
-      font-size: clamp(22px, 4vw, 30px);
-      font-weight: 800;
-      line-height: 1.05;
-    }
-
-    .metric-delta {
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .band {
-      border-radius: 18px;
-      padding: 16px 18px;
-      line-height: 1.55;
-      border: 1px solid transparent;
-      margin-top: 14px;
-    }
-
-    .band strong { display: block; margin-bottom: 4px; }
+    .band { border-radius: 18px; padding: 16px 18px; margin-top: 14px; border: 1px solid transparent; line-height: 1.5; }
     .band.ok { background: #e8f5e9; color: #166534; border-color: #cfe8d1; }
     .band.warn { background: #fff8e1; color: #92400e; border-color: #f9d97e; }
     .band.danger { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
     .band.neutral { background: #f3f4f6; color: #374151; border-color: #e5e7eb; }
 
-    .status {
-      margin-top: 14px;
-      display: none;
-      border-radius: 16px;
-      padding: 14px 16px;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      color: #475569;
-      font-size: 14px;
-      line-height: 1.6;
-    }
+    .cta-row { display: flex; gap: 12px; margin-top: 18px; }
+    .btn { border: 0; border-radius: 14px; padding: 14px 20px; font-weight: 800; cursor: pointer; transition: transform 0.1s; }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: #eef2f7; color: #334155; border: 1px solid #dbe3ee; }
 
-    .cta-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
+    .status { display: none; margin-top: 14px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 16px; color: #475569; font-size: 14px; }
+    .report-box { display: none; margin-top: 20px; padding: 28px; border: 1px solid #d7e2da; border-left: 8px solid #2E7D32; border-radius: 18px; background: #fff; }
+    
+    .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 15px; }
+    .summary-item { font-size: 14px; padding: 5px 0; border-bottom: 1px solid #f0f0f0; }
 
-    .btn {
-      appearance: none;
-      border: 0;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform .06s ease, opacity .18s ease, box-shadow .18s ease;
-    }
-
-    .btn:active { transform: translateY(1px); }
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 12px 24px rgba(15,118,110,0.20);
-    }
-    .btn-secondary {
-      background: #eef2f7;
-      color: #334155;
-      border: 1px solid #dbe3ee;
-    }
-
-    .report-box {
-      border: 1px solid #d7e2da;
-      border-left: 8px solid #2E7D32;
-      background: linear-gradient(180deg, #ffffff 0%, #fbfcfb 100%);
-      padding: 28px;
-      border-radius: 18px;
-      margin-top: 20px;
-      display: none;
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
-    }
-
-    .report-box h2 {
-      margin: 0 0 8px;
-      font-size: clamp(26px, 4vw, 40px);
-      line-height: 1.04;
-      letter-spacing: -0.02em;
-    }
-
-    .report-box p {
-      line-height: 1.75;
-      font-size: 16px;
-    }
-
-    .report-subtitle {
-      color: var(--muted);
-      margin-bottom: 16px;
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .divider {
-      height: 1px;
-      background: var(--line);
-      margin: 12px 0 18px;
-    }
-
-    .summary-caption {
-      color: #667085;
-      font-size: 15px;
-      margin-top: 18px;
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-
-    .summary-item {
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    .summary-item b { font-weight: 800; }
-
-    .footer-note {
-      color: #7A7A7A;
-      font-size: 0.85rem;
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    @media (max-width: 768px) {
-      .shell {
-        padding: 18px 14px 34px;
-      }
-
-      .grid-2,
-      .grid-3,
-      .metrics,
-      .summary-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        border-radius: 22px;
-        padding: 22px 18px;
-      }
-
-      .section {
-        padding: 18px;
-      }
-    }
-
-    @media print {
-      body { background: white; }
-      .hero, .card > .section:not(.printable), .cta-row, .status, .footer-note { display: none !important; }
-      .card { box-shadow: none; border: 0; }
-      .report-box { display: block !important; border-color: #9ca3af; }
-    }
+    @media (max-width: 768px) { .grid-2, .metrics, .summary-grid { grid-template-columns: 1fr; } .cta-row { flex-direction: column; } }
+    @media print { .hero, .cta-row, .status, .step-box, .input, label, .hint { display: none !important; } .report-box { display: block !important; border: 1px solid #ccc; } }
   </style>
 </head>
 <body>
   <div class="shell">
     <section class="hero">
-      <div class="eyebrow">Simulador gerencial</div>
       <h1>Simulador de Punto de Indiferencia</h1>
-      <p>Calcula cuántas unidades necesitas vender para bajar precio sin sacrificar la utilidad bruta.</p>
-      <div class="info-box">
-        <strong>Uso sugerido:</strong> 1) ingresa los datos actuales, 2) escribe el nuevo precio deseado, 3) la plataforma calcula sola, 4) genera y descarga el reporte.
-      </div>
+      <p>Calcula cuántas unidades vender para bajar el precio sin perder utilidad.</p>
+      <div class="info-box"><strong>Uso:</strong> Llena los datos y presiona el botón para ver el análisis estratégico.</div>
     </section>
 
     <section class="card">
       <div class="section">
-        <div class="step-box">Paso 1. Ingresa los datos actuales del producto.</div>
+        <div class="step-box">Paso 1. Datos actuales</div>
         <div class="grid-2">
-          <div class="field">
-            <label for="producto">Producto o categoría</label>
-            <input id="producto" class="input" type="text" value="cualquier producto" />
-          </div>
-          <div class="field">
-            <label for="precioActual">Precio de venta actual</label>
-            <input id="precioActual" class="input" type="number" step="0.01" value="10.00" />
-            <div class="hint">Es el precio actual al que hoy vendes el producto.</div>
-          </div>
-          <div class="field">
-            <label for="unidadesActuales">Unidades vendidas actuales</label>
-            <input id="unidadesActuales" class="input" type="number" step="1" value="3000" />
-            <div class="hint">Cantidad actual vendida en el período que estás analizando.</div>
-          </div>
-          <div class="field">
-            <label for="margenActual">Margen bruto actual (%)</label>
-            <input id="margenActual" class="input" type="number" step="0.01" value="26.00" />
-            <div class="hint">Margen bruto estimado del producto en el escenario actual.</div>
-          </div>
+          <div class="field"><label>Producto</label><input id="producto" class="input" type="text" value="Cualquier producto" /></div>
+          <div class="field"><label>Precio Actual</label><input id="precioActual" class="input" type="number" value="10.00" /></div>
+          <div class="field"><label>Unidades Actuales</label><input id="unidadesActuales" class="input" type="number" value="3000" /></div>
+          <div class="field"><label>Margen Bruto (%)</label><input id="margenActual" class="input" type="number" value="26.00" /></div>
         </div>
       </div>
 
       <div class="section">
-        <div class="step-box">Paso 2. Escribe el nuevo precio que quieres evaluar.</div>
+        <div class="step-box">Paso 2. Nuevo Escenario</div>
         <div class="grid-2">
-          <div class="field">
-            <label for="nuevoPrecio">Nuevo precio propuesto</label>
-            <input id="nuevoPrecio" class="input" type="number" step="0.01" value="9.50" />
-            <div class="hint">La plataforma calculará automáticamente cuántas unidades debes vender para conservar la misma utilidad bruta.</div>
-          </div>
-        </div>
-        <div style="height:14px"></div>
-        <div class="field">
-          <label for="autorReporte">Firma del reporte</label>
-          <input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" />
-          <div class="hint">Usa este campo para identificar la decisión, el período o el destinatario del informe.</div>
+          <div class="field"><label>Nuevo Precio</label><input id="nuevoPrecio" class="input" type="number" value="9.50" /></div>
+          <div class="field"><label>Firma</label><input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" /></div>
         </div>
       </div>
 
-      <div class="section printable">
-        <div class="step-box">Paso 3. Revisa el cálculo automático y genera el reporte.</div>
-
+      <div class="section">
+        <div class="step-box">Paso 3. Resultados</div>
         <div class="metrics">
-          <div class="metric">
-            <div class="metric-label">Costo unitario estimado</div>
-            <div class="metric-value" id="metricCosto">$0.00</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Nuevo margen bruto</div>
-            <div class="metric-value" id="metricMargen">0.00%</div>
-            <div class="metric-delta" id="metricMargenDelta">0.00 pts</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Meta de unidades</div>
-            <div class="metric-value" id="metricUnidades">0</div>
-            <div class="metric-delta" id="metricVariacion">0.00% Vol.</div>
-          </div>
+          <div class="metric"><div class="metric-label">Costo Unitario</div><div id="metricCosto" class="metric-value">$0.00</div></div>
+          <div class="metric"><div class="metric-label">Nuevo Margen</div><div id="metricMargen" class="metric-value">0%</div></div>
+          <div class="metric"><div class="metric-label">Meta Unidades</div><div id="metricUnidades" class="metric-value">0</div></div>
         </div>
-
         <div id="diagnostico"></div>
-
+        
         <div class="cta-row">
           <button class="btn btn-primary" id="btnGenerar">📄 Generar reporte gerencial</button>
           <button class="btn btn-secondary" id="btnDescargar">⬇️ Descargar reporte en PDF</button>
         </div>
-
         <div id="statusBox" class="status"></div>
+      </div>
 
-        <div id="reportBox" class="report-box">
-          <div class="band neutral" id="headlineBox" style="margin-top:0; margin-bottom:16px;"></div>
-
-          <h2>Reporte Gerencial de Punto de Indiferencia</h2>
-          <div class="report-subtitle" id="reportAutor">Desarrollado por Jaime Loaiza</div>
-          <div class="divider"></div>
-
-          <div class="summary-grid" style="margin-bottom:16px;">
-            <div class="metric">
-              <div class="metric-label">Impacto clave</div>
-              <div class="metric-value" id="impactUnits">0</div>
-              <div class="metric-delta" id="impactVariation">0.00% vs base actual</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label">Utilidad bruta a preservar</div>
-              <div class="metric-value" id="impactUb">$0.00</div>
-              <div class="metric-delta">Referencia económica actual</div>
-            </div>
+      <div id="reportBox" class="report-box">
+        <div id="headlineBox" class="band neutral"></div>
+        <h2 style="margin-top:20px;">Reporte Gerencial</h2>
+        <div id="reportAutor" style="font-weight:bold; color:var(--muted);"></div>
+        <hr>
+        <div class="summary-grid">
+          <div class="metric">
+            <div class="metric-label">Meta Requerida</div>
+            <div id="impactUnits" class="metric-value">0</div>
+            <div id="impactVariation" class="metric-delta">0% vs base</div>
           </div>
-
-          <div class="band warn" id="strategyLimitBox"></div>
-
-          <div class="band" id="diagnosisBox"></div>
-
-          <div class="band neutral" id="ruleBox"></div>
-
-          <div class="summary-caption">Resumen técnico del escenario</div>
-          <div class="summary-grid">
-            <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
-            <div class="summary-item"><b>Nuevo precio:</b> <span id="sumNuevoPrecio"></span></div>
-            <div class="summary-item"><b>Precio actual:</b> <span id="sumPrecioActual"></span></div>
-            <div class="summary-item"><b>Costo unitario estimado:</b> <span id="sumCosto"></span></div>
-            <div class="summary-item"><b>Unidades actuales:</b> <span id="sumUnidades"></span></div>
-            <div class="summary-item"><b>Nuevo margen bruto:</b> <span id="sumMargenNuevo"></span></div>
-            <div class="summary-item"><b>Margen bruto actual:</b> <span id="sumMargenActual"></span></div>
-            <div class="summary-item"><b>Meta requerida:</b> <span id="sumMeta"></span></div>
+          <div class="metric">
+            <div class="metric-label">Utilidad a Preservar</div>
+            <div id="impactUb" class="metric-value">$0.00</div>
           </div>
+        </div>
+        <div id="strategyLimitBox" class="band neutral"></div>
+        <div id="diagnosisBox" class="band"></div>
+        <div id="ruleBox" class="band neutral"></div>
+        
+        <h3 style="margin-top:20px;">Ficha Técnica</h3>
+        <div class="summary-grid">
+          <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
+          <div class="summary-item"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio"></span></div>
+          <div class="summary-item"><b>Costo Unitario:</b> <span id="sumCosto"></span></div>
+          <div class="summary-item"><b>Margen Nuevo:</b> <span id="sumMargenNuevo"></span></div>
         </div>
       </div>
     </section>
-
-    <div class="footer-note">Simulador de Punto de Indiferencia | Developed by Jaime Loaiza</div>
   </div>
 
   <script>
     const $ = (id) => document.getElementById(id);
 
     const els = {
-      producto: $("producto"),
-      precioActual: $("precioActual"),
-      unidadesActuales: $("unidadesActuales"),
-      margenActual: $("margenActual"),
-      nuevoPrecio: $("nuevoPrecio"),
-      autorReporte: $("autorReporte"),
-      metricCosto: $("metricCosto"),
-      metricMargen: $("metricMargen"),
-      metricMargenDelta: $("metricMargenDelta"),
-      metricUnidades: $("metricUnidades"),
-      metricVariacion: $("metricVariacion"),
-      diagnostico: $("diagnostico"),
-      btnGenerar: $("btnGenerar"),
-      btnDescargar: $("btnDescargar"),
-      statusBox: $("statusBox"),
-      reportBox: $("reportBox"),
-      reportAutor: $("reportAutor"),
-      reportResumen: $("reportResumen"),
-      greenBox: $("greenBox"),
-      yellowBox: $("yellowBox"),
-      sumProducto: $("sumProducto"),
-      sumNuevoPrecio: $("sumNuevoPrecio"),
-      sumPrecioActual: $("sumPrecioActual"),
-      sumCosto: $("sumCosto"),
-      sumUnidades: $("sumUnidades"),
-      sumMargenNuevo: $("sumMargenNuevo"),
-      sumMargenActual: $("sumMargenActual"),
-      sumMeta: $("sumMeta"),
-      headlineBox: $("headlineBox"),
-      impactUnits: $("impactUnits"),
-      impactVariation: $("impactVariation"),
-      impactUb: $("impactUb"),
-      strategyLimitBox: $("strategyLimitBox"),
-      diagnosisBox: $("diagnosisBox"),
-      ruleBox: $("ruleBox")
+      producto: $("producto"), precioActual: $("precioActual"), unidadesActuales: $("unidadesActuales"),
+      margenActual: $("margenActual"), nuevoPrecio: $("nuevoPrecio"), autorReporte: $("autorReporte"),
+      metricCosto: $("metricCosto"), metricMargen: $("metricMargen"), metricUnidades: $("metricUnidades"),
+      diagnostico: $("diagnostico"), statusBox: $("statusBox"), reportBox: $("reportBox"),
+      headlineBox: $("headlineBox"), reportAutor: $("reportAutor"), impactUnits: $("impactUnits"),
+      impactVariation: $("impactVariation"), impactUb: $("impactUb"), strategyLimitBox: $("strategyLimitBox"),
+      diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), sumProducto: $("sumProducto"),
+      sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), sumMargenNuevo: $("sumMargenNuevo")
     };
 
-    const fmtMoney = (value) => {
-      const n = Number(value || 0);
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(n);
-    };
-
-    const fmtUnits = (value) => {
-      const n = Number(value || 0);
-      return new Intl.NumberFormat("en-US", {
-        maximumFractionDigits: 0
-      }).format(Math.round(n));
-    };
+    const fmtMoney = (v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(v);
+    const fmtUnits = (v) => new Intl.NumberFormat("en-US").format(Math.round(v));
 
     function computeModel() {
-      const producto = els.producto.value.trim() || "cualquier producto";
-      const pActual = Number(els.precioActual.value || 0);
-      const qActual = Number(els.unidadesActuales.value || 0);
-      const margenActual = Number(els.margenActual.value || 0);
-      const nuevoPrecio = Number(els.nuevoPrecio.value || 0);
-      const autorReporte = els.autorReporte.value.trim() || "Desarrollado por Jaime Loaiza";
+      const pAct = Number(els.precioActual.value);
+      const qAct = Number(els.unidadesActuales.value);
+      const mAct = Number(els.margenActual.value) / 100;
+      const pNew = Number(els.nuevoPrecio.value);
 
-      const costoUnitario = pActual * (1 - (margenActual / 100));
-      const utilidadObjetivo = qActual * (pActual - costoUnitario);
-      const gananciaNueva = nuevoPrecio - costoUnitario;
-      const nuevoMargen = nuevoPrecio > 0 ? (gananciaNueva / nuevoPrecio) * 100 : 0;
-
-      let qNecesaria = 0;
-      let variacionVol = 0;
-
-      if (gananciaNueva > 0 && qActual > 0) {
-        qNecesaria = utilidadObjetivo / gananciaNueva;
-        variacionVol = ((qNecesaria / qActual) - 1) * 100;
-      }
-
-      const precioLimiteEstructural = qActual > 0 ? (utilidadObjetivo / (qActual * 1.18)) + costoUnitario : 0;
+      const costo = pAct * (1 - mAct);
+      const utilidadObj = qAct * (pAct - costo);
+      const gananciaNew = pNew - costo;
+      
+      let qNec = gananciaNew > 0 ? utilidadObj / gananciaNew : 0;
+      let varVol = qAct > 0 ? ((qNec / qAct) - 1) * 100 : 0;
+      let mNew = pNew > 0 ? ((pNew - costo) / pNew) * 100 : 0;
 
       return {
-        producto,
-        pActual,
-        qActual,
-        margenActual,
-        nuevoPrecio,
-        autorReporte,
-        costoUnitario,
-        utilidadObjetivo,
-        gananciaNueva,
-        nuevoMargen,
-        qNecesaria,
-        variacionVol,
-        precioLimiteEstructural
+        producto: els.producto.value, pAct, qAct, mAct: mAct * 100, pNew,
+        costo, utilidadObj, qNec, varVol, mNew,
+        autor: els.autorReporte.value,
+        pLimite: (utilidadObj / (qAct * 1.25)) + costo // Límite referencial
       };
     }
 
-    function renderMainMetrics(data) {
-      els.metricCosto.textContent = fmtMoney(data.costoUnitario);
-      els.metricMargen.textContent = `${data.nuevoMargen.toFixed(2)}%`;
-      els.metricMargenDelta.textContent = `${(data.nuevoMargen - data.margenActual).toFixed(2)}% vs actual`;
-      els.metricUnidades.textContent = fmtUnits(data.qNecesaria);
-      els.metricVariacion.textContent = `${data.variacionVol.toFixed(2)}% Vol.`;
-    }
-
-    function renderDiagnosis(data) {
-     function renderDiagnosis(data) {
-  if (data.nuevoPrecio <= data.costoUnitario) {
-    els.diagnostico.innerHTML = `
-      <div class="band danger">
-        <strong>🔴 Destrucción de valor inmediata</strong>
-        El nuevo precio es igual o inferior al costo unitario estimado. En este escenario, cada unidad adicional profundiza la pérdida.
-      </div>
-    `;
-  } else if (data.variacionVol <= 9) {
-    els.diagnostico.innerHTML = `
-      <div class="band ok">
-        <strong>🟢 Zona óptima</strong>
-        La exigencia de volumen se mantiene dentro del rango orgánico y referente del negocio.
-      </div>
-    `;
-  } else if (data.variacionVol <= 18) {
-    els.diagnostico.innerHTML = `
-      <div class="band warn">
-        <strong>🟡 Viable con gestión</strong>
-        El crecimiento requerido equivale hasta dos veces la referencia orgánica y exige gestión comercial activa.
-      </div>
-    `;
-  } else if (data.variacionVol <= 27) {
-    els.diagnostico.innerHTML = `
-      <div class="band warn">
-        <strong>🟠 Exigente</strong>
-        El crecimiento requerido equivale hasta tres veces la referencia orgánica y demanda un esfuerzo comercial intensivo.
-      </div>
-    `;
-  } else {
-    els.diagnostico.innerHTML = `
-      <div class="band danger">
-        <strong>🔴 Estructural</strong>
-        La exigencia de volumen ya no es comercialmente razonable y requiere cambios de fondo en la forma de operar el negocio.
-      </div>
-    `;
-  }
-}
-function renderReport(data) {
-  let headlineClass = "neutral";
-  let decisionText = "";
-  let diagnosisText = "";
-
-  if (data.nuevoPrecio <= data.costoUnitario) {
-  headlineClass = "danger";
-  decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Destrucción inmediata de valor`;
-  diagnosisText = "El precio propuesto se ubica igual o por debajo del costo unitario estimado. En este escenario, cada unidad adicional destruye valor.";
-} else if (data.variacionVol <= 9) {
-  headlineClass = "ok";
-  decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Zona óptima`;
-  diagnosisText = "La exigencia de volumen se mantiene dentro del rango orgánico y referente del negocio.";
-} else if (data.variacionVol <= 18) {
-  headlineClass = "warn";
-  decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Viable con gestión`;
-  diagnosisText = "El crecimiento requerido equivale hasta dos veces la referencia orgánica y exige gestión comercial activa.";
-} else if (data.variacionVol <= 27) {
-  headlineClass = "warn";
-  decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Exigente`;
-  diagnosisText = "El crecimiento requerido equivale hasta tres veces la referencia orgánica y demanda un esfuerzo comercial intensivo.";
-} else {
-  headlineClass = "danger";
-  decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Estructural`;
-  diagnosisText = "La exigencia de volumen ya no es comercialmente razonable y requiere cambios de fondo en capacidades, canal, mercado o modelo de negocio.";
-}
-
-  els.headlineBox.className = `band ${headlineClass}`;
-  els.headlineBox.innerHTML = `<strong>${decisionText}</strong>`;
-
-  els.reportAutor.textContent = data.autorReporte;
-
-  // 🔥 AQUÍ SE LLENAN LOS NÚMEROS QUE HOY TE SALEN EN CERO
-  els.impactUnits.textContent = fmtUnits(data.qNecesaria);
-  els.impactVariation.textContent = `${data.variacionVol.toFixed(2)}% vs base actual`;
-  els.impactUb.textContent = fmtMoney(data.utilidadObjetivo);
-
-    
-    els.strategyLimitBox.innerHTML = `
-  <strong>Límite estratégico</strong>
-  Precio mínimo sin entrar en zona estructural: <b>${fmtMoney(data.precioLimiteEstructural)}</b>.<br><br>
-  Por debajo de este nivel, el volumen requerido deja de ser comercialmente razonable y el descuento empieza a exigir más que compromiso: exige cambios de fondo.
-`;
-  els.diagnosisBox.className = `band ${headlineClass}`;
-  els.diagnosisBox.innerHTML = `
-    <strong>Diagnóstico</strong>
-    ${diagnosisText}
-  `;
-
-  els.ruleBox.className = "band neutral";
-
-  if (data.nuevoPrecio <= data.costoUnitario) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      El descuento ya consumió toda la utilidad disponible. No se trata de vender más, sino de evitar profundizar la destrucción de valor.
-    `;
- } else if (data.variacionVol <= 9) {
-  els.ruleBox.innerHTML = `
-    <strong>Lectura gerencial</strong>
-    La decisión es absorbible dentro de la dinámica orgánica del negocio. Puede ejecutarse con seguimiento normal al cumplimiento.
-  `;
-} else if (data.variacionVol <= 18) {
-  els.ruleBox.innerHTML = `
-    <strong>Lectura gerencial</strong>
-    La decisión es viable, pero solo si existe gestión comercial activa. El volumen debe revisarse con frecuencia para confirmar que el descuento no erosiona la utilidad.
-  `;
-} else if (data.variacionVol <= 27) {
-  els.ruleBox.innerHTML = `
-    <strong>Lectura gerencial</strong>
-    La decisión exige compromiso máximo. El negocio ya no puede depender solo de inercia comercial; necesita acciones intensivas para capturar el volumen requerido.
-  `;
-} else {
-  els.ruleBox.innerHTML = `
-    <strong>Lectura gerencial</strong>
-    Un descuento puede parecer pequeño en el precio, pero si obliga a crecer 25% o 40%, deja de ser comercialmente razonable. Cuidar un negocio se hace desde la utilidad, no desde el valor de la venta.
-  `;
-}
-
-els.sumProducto.textContent = data.producto;
-els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
-els.sumPrecioActual.textContent = fmtMoney(data.pActual);
-els.sumCosto.textContent = fmtMoney(data.costoUnitario);
-els.sumUnidades.textContent = fmtUnits(data.qActual);
-els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
-els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
-els.sumMeta.textContent = fmtUnits(data.qNecesaria);
-
-els.reportBox.style.display = "block";
-}
-      function showStatus() {
-  els.statusBox.style.display = "block";
-  els.statusBox.innerHTML = `
-    Calculando punto de indiferencia...<br>
-    Preparando resumen ejecutivo...<br>
-    Generando versión descargable...
-  `;
-}
-      els.statusBox.style.display = "block";
-      els.statusBox.innerHTML = `
-        Calculando punto de indiferencia...<br>
-        Preparando resumen ejecutivo...<br>
-        Generando versión descargable...
-      `;
-    }
-
-   function hideStatus() {
-  setTimeout(() => {
-    els.statusBox.style.display = "none";
-  }, 900);
-}
-function renderReport(data) {
-  let headlineClass = "neutral";
-  let decisionText = "";
-  let diagnosisText = "";
-
-  if (data.nuevoPrecio <= data.costoUnitario) {
-    headlineClass = "danger";
-    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Destrucción inmediata de valor`;
-    diagnosisText = "El precio propuesto se ubica igual o por debajo del costo unitario estimado. En este escenario, cada unidad adicional destruye valor.";
-  } else if (data.variacionVol <= 9) {
-    headlineClass = "ok";
-    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Zona óptima`;
-    diagnosisText = "La exigencia de volumen se mantiene dentro del rango orgánico y referente del negocio.";
-  } else if (data.variacionVol <= 18) {
-    headlineClass = "warn";
-    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Viable con gestión`;
-    diagnosisText = "El crecimiento requerido equivale hasta dos veces la referencia orgánica y exige gestión comercial activa.";
-  } else if (data.variacionVol <= 27) {
-    headlineClass = "warn";
-    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Exigente`;
-    diagnosisText = "El crecimiento requerido equivale hasta tres veces la referencia orgánica y demanda un esfuerzo comercial intensivo.";
-  } else {
-    headlineClass = "danger";
-    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Estructural`;
-    diagnosisText = "La exigencia de volumen ya no es comercialmente razonable y requiere cambios de fondo en capacidades, canal, mercado o modelo de negocio.";
-  }
-
-  els.headlineBox.className = `band ${headlineClass}`;
-  els.headlineBox.innerHTML = `<strong>${decisionText}</strong>`;
-
-  els.reportAutor.textContent = data.autorReporte;
-  els.impactUnits.textContent = fmtUnits(data.qNecesaria);
-  els.impactVariation.textContent = `${data.variacionVol.toFixed(2)}% vs base actual`;
-  els.impactUb.textContent = fmtMoney(data.utilidadObjetivo);
-
-  els.strategyLimitBox.innerHTML = `
-    <strong>Límite estratégico</strong>
-    Precio mínimo sin entrar en zona estructural: <b>${fmtMoney(data.precioLimiteEstructural)}</b>.<br><br>
-    Por debajo de este nivel, el volumen requerido deja de ser comercialmente razonable y el descuento empieza a exigir más que compromiso: exige cambios de fondo.
-  `;
-
-  els.diagnosisBox.className = `band ${headlineClass}`;
-  els.diagnosisBox.innerHTML = `
-    <strong>Diagnóstico</strong>
-    ${diagnosisText}
-  `;
-
-  if (data.nuevoPrecio <= data.costoUnitario) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      El descuento ya consumió toda la utilidad disponible. No se trata de vender más, sino de evitar profundizar la destrucción de valor.
-    `;
-  } else if (data.variacionVol <= 9) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      La decisión es absorbible dentro de la dinámica orgánica del negocio. Puede ejecutarse con seguimiento normal al cumplimiento.
-    `;
-  } else if (data.variacionVol <= 18) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      La decisión es viable, pero solo si existe gestión comercial activa. El volumen debe revisarse con frecuencia para confirmar que el descuento no erosiona la utilidad.
-    `;
-  } else if (data.variacionVol <= 27) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      La decisión exige compromiso máximo. El negocio ya no puede depender solo de inercia comercial; necesita acciones intensivas para capturar el volumen requerido.
-    `;
-  } else {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      Un descuento puede parecer pequeño en el precio, pero si obliga a crecer 25% o 40%, deja de ser comercialmente razonable. Cuidar un negocio se hace desde la utilidad, no desde el valor de la venta.
-    `;
-  }
-
-  els.sumProducto.textContent = data.producto;
-  els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
-  els.sumPrecioActual.textContent = fmtMoney(data.pActual);
-  els.sumCosto.textContent = fmtMoney(data.costoUnitario);
-  els.sumUnidades.textContent = fmtUnits(data.qActual);
-  els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
-  els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
-  els.sumMeta.textContent = fmtUnits(data.qNecesaria);
-
-  els.reportBox.style.display = "block";
-}
-
-function showStatus() {
-  els.statusBox.style.display = "block";
-  els.statusBox.innerHTML = `
-    Calculando punto de indiferencia...<br>
-    Preparando resumen ejecutivo...<br>
-    Generando versión descargable...
-  `;
-}
-
-function hideStatus() {
-  setTimeout(() => {
-    els.statusBox.style.display = "none";
-  }, 900);
-}
     function updateAll() {
-      const data = computeModel();
-      renderMainMetrics(data);
-      renderDiagnosis(data);
-      return data;
-    }
+      const d = computeModel();
+      els.metricCosto.textContent = fmtMoney(d.costo);
+      els.metricMargen.textContent = d.mNew.toFixed(2) + "%";
+      els.metricUnidades.textContent = fmtUnits(d.qNec);
 
-    function generateReport() {
-  const data = updateAll();
-  showStatus();
-
-  setTimeout(() => {
-    if (data.nuevoPrecio <= data.costoUnitario) {
-      alert("No se puede generar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
-      hideStatus();
-      return;
-    }
-
-    renderReport(data);
-    hideStatus();
-    els.reportBox.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 700);
-}
-
-function downloadPdf() {
-  const data = updateAll();
-
-  if (data.nuevoPrecio <= data.costoUnitario) {
-    alert("No se puede descargar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
-    return;
-  }
-
-  renderReport(data);
-  setTimeout(() => window.print(), 120);
-}
-      const data = updateAll();
-      showStatus();
-
-      setTimeout(() => {
-        if (data.nuevoPrecio <= data.costoUnitario) {
-          alert("No se puede generar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
-          hideStatus();
-          return;
-        }
-
-        renderReport(data);
-        hideStatus();
-        els.reportBox.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 700);
-    }
-
-function generateReport() {
-  const data = updateAll();
-  showStatus();
-
-  setTimeout(() => {
-    if (data.nuevoPrecio <= data.costoUnitario) {
-      alert("No se puede generar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
-      hideStatus();
-      return;
-    }
-
-    renderReport(data);
-    hideStatus();
-    els.reportBox.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 700);
-}
-
-function downloadPdf() {
-  const data = updateAll();
-
-  if (data.nuevoPrecio <= data.costoUnitario) {
-    alert("No se puede descargar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
-    return;
-  }
-
-  renderReport(data);
-  setTimeout(() => window.print(), 120);
-}
-      const data = updateAll();
-      if (data.nuevoPrecio <= data.costoUnitario) {
-        alert("No se puede descargar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
-        return;
+      if (d.pNew <= d.costo) {
+        els.diagnostico.innerHTML = `<div class="band danger"><strong>🔴 Error:</strong> El precio es menor al costo.</div>`;
+      } else {
+        els.diagnostico.innerHTML = `<div class="band ok"><strong>🟢 Cálculo al día:</strong> Listo para generar reporte.</div>`;
       }
-
-      renderReport(data);
-      setTimeout(() => window.print(), 120);
+      return d;
     }
 
-    [els.producto, els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.autorReporte]
-      .forEach(el => el.addEventListener('input', updateAll));
+    function renderReport(d) {
+      let color = d.varVol > 20 ? "danger" : d.varVol > 10 ? "warn" : "ok";
+      
+      els.headlineBox.className = `band ${color}`;
+      els.headlineBox.innerHTML = `<strong>Decisión: ${fmtMoney(d.pNew)}</strong>`;
+      els.reportAutor.textContent = d.autor;
+      els.impactUnits.textContent = fmtUnits(d.qNec);
+      els.impactVariation.textContent = d.varVol.toFixed(2) + "% vs actual";
+      els.impactUb.textContent = fmtMoney(d.utilidadObj);
+      
+      els.diagnosisBox.className = `band ${color}`;
+      els.diagnosisBox.innerHTML = `<strong>Diagnóstico:</strong> El incremento de volumen requerido es del ${d.varVol.toFixed(1)}%.`;
+      
+      els.strategyLimitBox.innerHTML = `<strong>Límite:</strong> No bajar de ${fmtMoney(d.pLimite)} para mantener viabilidad.`;
+      
+      els.sumProducto.textContent = d.producto;
+      els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);
+      els.sumCosto.textContent = fmtMoney(d.costo);
+      els.sumMargenNuevo.textContent = d.mNew.toFixed(2) + "%";
 
-    els.btnGenerar.addEventListener('click', generateReport);
-    els.btnDescargar.addEventListener('click', downloadPdf);
+      els.reportBox.style.display = "block";
+    }
 
-    updateAll();
-    
+    $("btnGenerar").onclick = () => {
+      const d = updateAll();
+      els.statusBox.style.display = "block";
+      els.statusBox.innerHTML = "Generando análisis...";
+      setTimeout(() => {
+        renderReport(d);
+        els.statusBox.style.display = "none";
+        els.reportBox.scrollIntoView({ behavior: "smooth" });
+      }, 600);
+    };
+
+    $("btnDescargar").onclick = () => {
+      updateAll();
+      renderReport(computeModel());
+      setTimeout(() => window.print(), 300);
+    };
+
+    // Actualización automática al escribir
+    [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio].forEach(input => {
+      input.oninput = updateAll;
+    });
+
+    updateAll(); // Carga inicial
   </script>
 </body>
 </html>
