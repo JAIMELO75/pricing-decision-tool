@@ -680,21 +680,6 @@ function renderReport(data) {
 
   els.reportBox.style.display = "block";
 }
-    <strong>Lectura gerencial</strong>
-    Si el volumen requerido no se confirma en la ejecución, la decisión debe revisarse o revertirse.
-  `;
-
-  els.sumProducto.textContent = data.producto;
-  els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
-  els.sumPrecioActual.textContent = fmtMoney(data.pActual);
-  els.sumCosto.textContent = fmtMoney(data.costoUnitario);
-  els.sumUnidades.textContent = fmtUnits(data.qActual);
-  els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
-  els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
-  els.sumMeta.textContent = fmtUnits(data.qNecesaria);
-
-  els.reportBox.style.display = "block";
-}
     function showStatus() {
       els.statusBox.style.display = "block";
       els.statusBox.innerHTML = `
