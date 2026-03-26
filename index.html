@@ -647,38 +647,38 @@ function renderReport(data) {
       <strong>Lectura gerencial</strong>
       El descuento ya consumió toda la utilidad disponible. No se trata de vender más, sino de evitar profundizar la destrucción de valor.
     `;
-  } else if (data.variacionVol <= 9) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      La decisión es absorbible dentro de la dinámica orgánica del negocio. Puede ejecutarse con seguimiento normal al cumplimiento.
-    `;
-  } else if (data.variacionVol <= 18) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      La decisión es viable, pero solo si existe gestión comercial activa. El volumen debe revisarse con frecuencia para confirmar que el descuento no erosiona la utilidad.
-    `;
-  } else if (data.variacionVol <= 27) {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      La decisión exige compromiso máximo. El negocio ya no puede depender solo de inercia comercial; necesita acciones intensivas para capturar el volumen requerido.
-    `;
-  } else {
-    els.ruleBox.innerHTML = `
-      <strong>Lectura gerencial</strong>
-      Un descuento puede parecer pequeño en el precio, pero si obliga a crecer 25% o 40%, deja de ser comercialmente razonable. Cuidar un negocio se hace desde la utilidad, no desde el valor de la venta.
-    `;
-  }
+ } else if (data.variacionVol <= 9) {
+  els.ruleBox.innerHTML = `
+    <strong>Lectura gerencial</strong>
+    La decisión es absorbible dentro de la dinámica orgánica del negocio. Puede ejecutarse con seguimiento normal al cumplimiento.
+  `;
+} else if (data.variacionVol <= 18) {
+  els.ruleBox.innerHTML = `
+    <strong>Lectura gerencial</strong>
+    La decisión es viable, pero solo si existe gestión comercial activa. El volumen debe revisarse con frecuencia para confirmar que el descuento no erosiona la utilidad.
+  `;
+} else if (data.variacionVol <= 27) {
+  els.ruleBox.innerHTML = `
+    <strong>Lectura gerencial</strong>
+    La decisión exige compromiso máximo. El negocio ya no puede depender solo de inercia comercial; necesita acciones intensivas para capturar el volumen requerido.
+  `;
+} else {
+  els.ruleBox.innerHTML = `
+    <strong>Lectura gerencial</strong>
+    Un descuento puede parecer pequeño en el precio, pero si obliga a crecer 25% o 40%, deja de ser comercialmente razonable. Cuidar un negocio se hace desde la utilidad, no desde el valor de la venta.
+  `;
+}
 
-  els.sumProducto.textContent = data.producto;
-  els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
-  els.sumPrecioActual.textContent = fmtMoney(data.pActual);
-  els.sumCosto.textContent = fmtMoney(data.costoUnitario);
-  els.sumUnidades.textContent = fmtUnits(data.qActual);
-  els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
-  els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
-  els.sumMeta.textContent = fmtUnits(data.qNecesaria);
+els.sumProducto.textContent = data.producto;
+els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
+els.sumPrecioActual.textContent = fmtMoney(data.pActual);
+els.sumCosto.textContent = fmtMoney(data.costoUnitario);
+els.sumUnidades.textContent = fmtUnits(data.qActual);
+els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
+els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
+els.sumMeta.textContent = fmtUnits(data.qNecesaria);
 
-  els.reportBox.style.display = "block";
+els.reportBox.style.display = "block";
 }
       function showStatus() {
   els.statusBox.style.display = "block";
