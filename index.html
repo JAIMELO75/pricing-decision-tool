@@ -20,7 +20,7 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
       color: var(--text);
       background: radial-gradient(circle at top left, rgba(15,118,110,0.08), transparent 24%), linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
     }
@@ -37,16 +37,7 @@
     }
 
     .hero h1 { margin: 0 0 10px; font-size: clamp(30px, 4vw, 46px); line-height: 1.03; }
-    .hero p { margin: 0; font-size: clamp(15px, 2vw, 18px); color: rgba(255,255,255,0.92); }
-
-    .info-box {
-      margin-top: 18px;
-      background: rgba(255,255,255,0.13);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 16px;
-      padding: 14px 16px;
-      font-size: 14px;
-    }
+    .hero p { margin: 0; font-size: 18px; color: rgba(255,255,255,0.92); }
 
     .card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
     .section { padding: 22px; border-top: 1px solid var(--line); }
@@ -65,8 +56,8 @@
 
     .metric { border: 1px solid var(--line); border-radius: 18px; padding: 16px; background: #fff; }
     .metric-label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
-    .metric-value { font-size: 24px; font-weight: 800; }
-    .metric-delta { margin-top: 8px; font-size: 13px; color: var(--muted); }
+    .metric-value { font-size: 26px; font-weight: 800; color: #0f172a; }
+    .metric-delta { margin-top: 8px; font-size: 13px; color: var(--muted); font-weight: 600; }
 
     .band { border-radius: 18px; padding: 16px 18px; margin-top: 14px; border: 1px solid transparent; line-height: 1.5; }
     .band.ok { background: #e8f5e9; color: #166534; border-color: #cfe8d1; }
@@ -75,16 +66,16 @@
     .band.neutral { background: #f3f4f6; color: #374151; border-color: #e5e7eb; }
 
     .cta-row { display: flex; gap: 12px; margin-top: 18px; }
-    .btn { border: 0; border-radius: 14px; padding: 14px 20px; font-weight: 800; cursor: pointer; transition: transform 0.1s; }
+    .btn { border: 0; border-radius: 14px; padding: 14px 20px; font-weight: 800; cursor: pointer; transition: transform 0.1s; display: flex; align-items: center; gap: 8px; }
     .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(15,118,110,0.2); }
     .btn-secondary { background: #eef2f7; color: #334155; border: 1px solid #dbe3ee; }
 
     .status { display: none; margin-top: 14px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 16px; color: #475569; font-size: 14px; }
     .report-box { display: none; margin-top: 20px; padding: 28px; border: 1px solid #d7e2da; border-left: 8px solid #2E7D32; border-radius: 18px; background: #fff; }
     
     .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 15px; }
-    .summary-item { font-size: 14px; padding: 5px 0; border-bottom: 1px solid #f0f0f0; }
+    .summary-item { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
 
     @media (max-width: 768px) { .grid-2, .metrics, .summary-grid { grid-template-columns: 1fr; } .cta-row { flex-direction: column; } }
     @media print { .hero, .cta-row, .status, .step-box, .input, label, .hint { display: none !important; } .report-box { display: block !important; border: 1px solid #ccc; } }
@@ -93,37 +84,48 @@
 <body>
   <div class="shell">
     <section class="hero">
+      <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; opacity: 0.8;">Herramienta Estratégica</div>
       <h1>Simulador de Punto de Indiferencia</h1>
-      <p>Calcula cuántas unidades vender para bajar el precio sin perder utilidad.</p>
-      <div class="info-box"><strong>Uso:</strong> Llena los datos y presiona el botón para ver el análisis estratégico.</div>
+      <p>Determina el volumen necesario para absorber cambios de precio sin sacrificar utilidad bruta.</p>
     </section>
 
     <section class="card">
       <div class="section">
-        <div class="step-box">Paso 1. Datos actuales</div>
+        <div class="step-box">Paso 1. Datos actuales del producto</div>
         <div class="grid-2">
-          <div class="field"><label>Producto</label><input id="producto" class="input" type="text" value="Cualquier producto" /></div>
-          <div class="field"><label>Precio Actual</label><input id="precioActual" class="input" type="number" value="10.00" /></div>
-          <div class="field"><label>Unidades Actuales</label><input id="unidadesActuales" class="input" type="number" value="3000" /></div>
-          <div class="field"><label>Margen Bruto (%)</label><input id="margenActual" class="input" type="number" value="26.00" /></div>
+          <div class="field"><label>Producto o Categoría</label><input id="producto" class="input" type="text" value="Cualquier producto" /></div>
+          <div class="field"><label>Precio de Venta Actual</label><input id="precioActual" class="input" type="number" step="0.01" value="10.00" /></div>
+          <div class="field"><label>Unidades Vendidas Actuales</label><input id="unidadesActuales" class="input" type="number" value="3000" /></div>
+          <div class="field"><label>Margen Bruto Actual (%)</label><input id="margenActual" class="input" type="number" step="0.1" value="26.0" /></div>
         </div>
       </div>
 
       <div class="section">
-        <div class="step-box">Paso 2. Nuevo Escenario</div>
+        <div class="step-box">Paso 2. Nuevo Escenario Propuesto</div>
         <div class="grid-2">
-          <div class="field"><label>Nuevo Precio</label><input id="nuevoPrecio" class="input" type="number" value="9.50" /></div>
-          <div class="field"><label>Firma</label><input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" /></div>
+          <div class="field"><label>Nuevo Precio Propuesto</label><input id="nuevoPrecio" class="input" type="number" step="0.01" value="9.50" /></div>
+          <div class="field"><label>Firma del Reporte</label><input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" /></div>
         </div>
       </div>
 
       <div class="section">
-        <div class="step-box">Paso 3. Resultados</div>
+        <div class="step-box">Paso 3. Análisis de Resultados</div>
         <div class="metrics">
-          <div class="metric"><div class="metric-label">Costo Unitario</div><div id="metricCosto" class="metric-value">$0.00</div></div>
-          <div class="metric"><div class="metric-label">Nuevo Margen</div><div id="metricMargen" class="metric-value">0%</div></div>
-          <div class="metric"><div class="metric-label">Meta Unidades</div><div id="metricUnidades" class="metric-value">0</div></div>
+          <div class="metric">
+            <div class="metric-label">Costo Unitario</div>
+            <div id="metricCosto" class="metric-value">$0.00</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Nuevo Margen Bruto</div>
+            <div id="metricMargen" class="metric-value">0%</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Meta Unidades</div>
+            <div id="metricUnidades" class="metric-value">0</div>
+            <div id="metricVariacion" class="metric-delta">0% Vol.</div>
+          </div>
         </div>
+        
         <div id="diagnostico"></div>
         
         <div class="cta-row">
@@ -134,10 +136,11 @@
       </div>
 
       <div id="reportBox" class="report-box">
-        <div id="headlineBox" class="band neutral"></div>
-        <h2 style="margin-top:20px;">Reporte Gerencial</h2>
-        <div id="reportAutor" style="font-weight:bold; color:var(--muted);"></div>
-        <hr>
+        <div id="headlineBox" class="band neutral" style="margin-top:0;"></div>
+        <h2 style="margin-top:20px;">Reporte Gerencial de Punto de Indiferencia</h2>
+        <div id="reportAutor" style="font-weight:800; color:var(--muted); font-size: 14px;"></div>
+        <hr style="border: 0; border-top: 1px solid var(--line); margin: 20px 0;">
+        
         <div class="summary-grid">
           <div class="metric">
             <div class="metric-label">Meta Requerida</div>
@@ -149,19 +152,25 @@
             <div id="impactUb" class="metric-value">$0.00</div>
           </div>
         </div>
+
         <div id="strategyLimitBox" class="band neutral"></div>
         <div id="diagnosisBox" class="band"></div>
         <div id="ruleBox" class="band neutral"></div>
         
-        <h3 style="margin-top:20px;">Ficha Técnica</h3>
+        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
         <div class="summary-grid">
           <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
           <div class="summary-item"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio"></span></div>
           <div class="summary-item"><b>Costo Unitario:</b> <span id="sumCosto"></span></div>
           <div class="summary-item"><b>Margen Nuevo:</b> <span id="sumMargenNuevo"></span></div>
+          <div class="summary-item"><b>Unidades Base:</b> <span id="sumUnidades"></span></div>
+          <div class="summary-item"><b>Meta de Unidades:</b> <span id="sumMeta"></span></div>
         </div>
       </div>
     </section>
+    <div style="text-align: center; margin-top: 30px; color: #7A7A7A; font-size: 13px;">
+      Simulador de Punto de Indiferencia | Developed by Jaime Loaiza
+    </div>
   </div>
 
   <script>
@@ -171,11 +180,12 @@
       producto: $("producto"), precioActual: $("precioActual"), unidadesActuales: $("unidadesActuales"),
       margenActual: $("margenActual"), nuevoPrecio: $("nuevoPrecio"), autorReporte: $("autorReporte"),
       metricCosto: $("metricCosto"), metricMargen: $("metricMargen"), metricUnidades: $("metricUnidades"),
-      diagnostico: $("diagnostico"), statusBox: $("statusBox"), reportBox: $("reportBox"),
-      headlineBox: $("headlineBox"), reportAutor: $("reportAutor"), impactUnits: $("impactUnits"),
-      impactVariation: $("impactVariation"), impactUb: $("impactUb"), strategyLimitBox: $("strategyLimitBox"),
-      diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), sumProducto: $("sumProducto"),
-      sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), sumMargenNuevo: $("sumMargenNuevo")
+      metricVariacion: $("metricVariacion"), diagnostico: $("diagnostico"), statusBox: $("statusBox"), 
+      reportBox: $("reportBox"), headlineBox: $("headlineBox"), reportAutor: $("reportAutor"), 
+      impactUnits: $("impactUnits"), impactVariation: $("impactVariation"), impactUb: $("impactUb"), 
+      strategyLimitBox: $("strategyLimitBox"), diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), 
+      sumProducto: $("sumProducto"), sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), 
+      sumMargenNuevo: $("sumMargenNuevo"), sumUnidades: $("sumUnidades"), sumMeta: $("sumMeta")
     };
 
     const fmtMoney = (v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(v);
@@ -199,43 +209,58 @@
         producto: els.producto.value, pAct, qAct, mAct: mAct * 100, pNew,
         costo, utilidadObj, qNec, varVol, mNew,
         autor: els.autorReporte.value,
-        pLimite: (utilidadObj / (qAct * 1.25)) + costo // Límite referencial
+        pLimite: (utilidadObj / (qAct * 1.22)) + costo 
       };
     }
 
     function updateAll() {
       const d = computeModel();
+      
+      // Actualizar Métricas Principales
       els.metricCosto.textContent = fmtMoney(d.costo);
       els.metricMargen.textContent = d.mNew.toFixed(2) + "%";
       els.metricUnidades.textContent = fmtUnits(d.qNec);
+      
+      // Actualizar % de Variación debajo de unidades
+      els.metricVariacion.textContent = (d.varVol >= 0 ? "+" : "") + d.varVol.toFixed(2) + "% Vol.";
+      els.metricVariacion.style.color = d.varVol > 20 ? "#b91c1c" : "#6b7280"; // Rojo si es > 20%
 
       if (d.pNew <= d.costo) {
-        els.diagnostico.innerHTML = `<div class="band danger"><strong>🔴 Error:</strong> El precio es menor al costo.</div>`;
+        els.diagnostico.innerHTML = `<div class="band danger"><strong>🔴 Destrucción de Valor:</strong> El nuevo precio es menor o igual al costo unitario.</div>`;
+      } else if (d.varVol > 25) {
+        els.diagnostico.innerHTML = `<div class="band danger"><strong>🟠 Riesgo Alto:</strong> Requiere un incremento de volumen del ${d.varVol.toFixed(1)}% para no perder dinero.</div>`;
       } else {
-        els.diagnostico.innerHTML = `<div class="band ok"><strong>🟢 Cálculo al día:</strong> Listo para generar reporte.</div>`;
+        els.diagnostico.innerHTML = `<div class="band ok"><strong>🟢 Escenario Calculado:</strong> Los datos están listos para el reporte.</div>`;
       }
       return d;
     }
 
     function renderReport(d) {
       let color = d.varVol > 20 ? "danger" : d.varVol > 10 ? "warn" : "ok";
+      let diagText = d.varVol > 20 ? "Exigencia estructural. Difícil de alcanzar orgánicamente." : "Viable con gestión comercial activa.";
       
       els.headlineBox.className = `band ${color}`;
-      els.headlineBox.innerHTML = `<strong>Decisión: ${fmtMoney(d.pNew)}</strong>`;
+      els.headlineBox.innerHTML = `<strong>Decisión Estratégica: ${fmtMoney(d.pNew)}</strong>`;
       els.reportAutor.textContent = d.autor;
+      
       els.impactUnits.textContent = fmtUnits(d.qNec);
-      els.impactVariation.textContent = d.varVol.toFixed(2) + "% vs actual";
+      els.impactVariation.textContent = d.varVol.toFixed(2) + "% de crecimiento necesario";
       els.impactUb.textContent = fmtMoney(d.utilidadObj);
       
       els.diagnosisBox.className = `band ${color}`;
-      els.diagnosisBox.innerHTML = `<strong>Diagnóstico:</strong> El incremento de volumen requerido es del ${d.varVol.toFixed(1)}%.`;
+      els.diagnosisBox.innerHTML = `<strong>Diagnóstico Gerencial:</strong> ${diagText}`;
       
-      els.strategyLimitBox.innerHTML = `<strong>Límite:</strong> No bajar de ${fmtMoney(d.pLimite)} para mantener viabilidad.`;
+      els.strategyLimitBox.innerHTML = `<strong>Límite Estratégico:</strong> El precio mínimo recomendado es <b>${fmtMoney(d.pLimite)}</b>. Bajar de ahí exige cambios en la estructura de costos.`;
       
+      els.ruleBox.innerHTML = `<strong>Lectura de Negocio:</strong> Para mantener una utilidad de ${fmtMoney(d.utilidadObj)}, el equipo debe asegurar la venta de ${fmtUnits(d.qNec)} unidades.`;
+
+      // Ficha Técnica
       els.sumProducto.textContent = d.producto;
       els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);
       els.sumCosto.textContent = fmtMoney(d.costo);
       els.sumMargenNuevo.textContent = d.mNew.toFixed(2) + "%";
+      els.sumUnidades.textContent = fmtUnits(d.qAct);
+      els.sumMeta.textContent = fmtUnits(d.qNec);
 
       els.reportBox.style.display = "block";
     }
@@ -243,26 +268,27 @@
     $("btnGenerar").onclick = () => {
       const d = updateAll();
       els.statusBox.style.display = "block";
-      els.statusBox.innerHTML = "Generando análisis...";
+      els.statusBox.innerHTML = "Analizando elasticidad y procesando reporte...";
       setTimeout(() => {
         renderReport(d);
         els.statusBox.style.display = "none";
         els.reportBox.scrollIntoView({ behavior: "smooth" });
-      }, 600);
+      }, 700);
     };
 
     $("btnDescargar").onclick = () => {
-      updateAll();
-      renderReport(computeModel());
+      const d = updateAll();
+      renderReport(d);
       setTimeout(() => window.print(), 300);
     };
 
-    // Actualización automática al escribir
-    [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio].forEach(input => {
+    // Escuchar cambios en vivo
+    [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.producto].forEach(input => {
       input.oninput = updateAll;
     });
 
-    updateAll(); // Carga inicial
+    // Inicio
+    updateAll();
   </script>
 </body>
 </html>
