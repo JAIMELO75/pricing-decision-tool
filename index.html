@@ -78,7 +78,23 @@
     .summary-item { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
 
     @media (max-width: 768px) { .grid-2, .grid-4, .summary-grid { grid-template-columns: 1fr; } .cta-row { flex-direction: column; } }
-    @media print { .hero, .cta-row, .status, .step-box, .input, label, .hint { display: none !important; } .report-box { display: block !important; border: 1px solid #ccc; } }
+    @media print {
+  body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .hero, .cta-row, .status, .step-box, .input, label, .hint { display: none !important; }
+  .shell { padding: 0; max-width: 100%; }
+  .card { border: none !important; box-shadow: none !important; }
+  .report-box { display: block !important; border: 1px solid #eee !important; padding: 0; }
+  
+  /* Hace que las tarjetas de métricas se vean de color en el PDF */
+  .metric { 
+    background-color: #f8fafc !important; 
+    border: 1px solid #e5e7eb !important; 
+    -webkit-print-color-adjust: exact; 
+  }
+  .band.ok { background-color: #e8f5e9 !important; color: #166534 !important; }
+  .band.warn { background-color: #fff8e1 !important; color: #92400e !important; }
+  .band.danger { background-color: #fee2e2 !important; color: #b91c1c !important; }
+}
   </style>
 </head>
 <body>
@@ -161,20 +177,20 @@
         <div id="diagnosisBox" class="band"></div>
         <div id="ruleBox" class="band neutral"></div>
         
-        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
-        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
+      <h3 style="margin-top:30px; border-bottom: 2px solid #0f766e; padding-bottom: 8px;">Resumen Técnico de la Decisión</h3>
 <div class="summary-grid">
-  <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
-  <div class="summary-item"><b>Costo Unitario:</b> <span id="sumCosto"></span></div>
+  <div class="summary-item" style="grid-column: span 2; background: #f1f5f9; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+    <b>📋 Análisis para:</b> <span id="sumProducto"></span> | <b>Costo Unitario:</b> <span id="sumCosto"></span>
+  </div>
+
+  <div class="summary-item"><b>💰 Precio Anterior:</b> <br> <span id="sumPrecioActual" style="font-size: 1.2em;"></span></div>
+  <div class="summary-item" style="color: #0f766e;"><b>🚀 Nuevo Precio:</b> <br> <span id="sumNuevoPrecio" style="font-size: 1.2em; font-weight: 800;"></span></div>
   
-  <div class="summary-item"><b>Precio Anterior:</b> <span id="sumPrecioActual"></span></div>
-  <div class="summary-item"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio"></span></div>
+  <div class="summary-item"><b>📉 Margen Anterior:</b> <br> <span id="sumMargenActual"></span></div>
+  <div class="summary-item" style="color: #0f766e;"><b>📈 Margen Nuevo:</b> <br> <span id="sumMargenNuevo" style="font-weight: 800;"></span></div>
   
-  <div class="summary-item"><b>Margen Anterior:</b> <span id="sumMargenActual"></span></div>
-  <div class="summary-item"><b>Margen Nuevo:</b> <span id="sumMargenNuevo"></span></div>
-  
-  <div class="summary-item"><b>Unidades Base:</b> <span id="sumUnidades"></span></div>
-  <div class="summary-item"><b>Meta de Unidades:</b> <span id="sumMeta"></span></div>
+  <div class="summary-item"><b>📦 Unidades Base:</b> <br> <span id="sumUnidades"></span></div>
+  <div class="summary-item" style="color: #0f766e;"><b>🎯 Meta de Unidades:</b> <br> <span id="sumMeta" style="font-weight: 800;"></span></div>
 </div>
     </section>
     <div style="text-align: center; margin-top: 30px; color: #7A7A7A; font-size: 13px;">
@@ -293,10 +309,14 @@ els.sumMeta.textContent = fmtUnits(d.qNec);     // Meta de Unidades
       }, 700);
     };
 
-    $("btnDescargar").onclick = () => {
-      const d = updateAll();
-      renderReport(d);
-      setTimeout(() => window.print(), 300);
+   $("btnDescargar").onclick = () => {
+  const d = updateAll();
+  renderReport(d);
+  // Pequeña espera para que los colores carguen antes de abrir la ventana de impresión
+  setTimeout(() => {
+    window.print();
+  }, 500);
+};
     };
 
     [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.producto].forEach(input => {
