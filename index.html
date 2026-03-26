@@ -136,7 +136,6 @@
       </div>
 
       <div id="reportBox" class="report-box">
-        <div id="headlineBox" class="band neutral" style="margin-top:0;"></div>
         <h2 style="margin-top:20px;">Reporte Gerencial de Punto de Indiferencia</h2>
         <div id="reportAutor" style="font-weight:800; color:var(--muted); font-size: 14px;"></div>
         <hr style="border: 0; border-top: 1px solid var(--line); margin: 20px 0;">
@@ -239,8 +238,6 @@
       let color = d.varVol > 20 ? "danger" : d.varVol > 10 ? "warn" : "ok";
       let diagText = d.varVol > 20 ? "Exigencia estructural. Difícil de alcanzar orgánicamente." : "Viable con gestión comercial activa.";
       
-      els.headlineBox.className = `band ${color}`;
-      els.headlineBox.innerHTML = `<strong>Decisión Estratégica: ${fmtMoney(d.pNew)}</strong>`;
       els.reportAutor.textContent = d.autor;
       
       els.impactUnits.textContent = fmtUnits(d.qNec);
