@@ -46,7 +46,7 @@
     .step-box { background: #F8F9FA; border: 1px solid #E9ECEF; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; font-weight: 700; }
 
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     
     .field { display: flex; flex-direction: column; gap: 8px; }
     .field label { font-size: 14px; font-weight: 700; }
@@ -77,7 +77,7 @@
     .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 15px; }
     .summary-item { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
 
-    @media (max-width: 768px) { .grid-2, .grid-4, .summary-grid { grid-template-columns: 1fr; } .cta-row { flex-direction: column; } }
+    @media (max-width: 768px) { .grid-2, .metrics, .summary-grid { grid-template-columns: 1fr; } .cta-row { flex-direction: column; } }
     @media print { .hero, .cta-row, .status, .step-box, .input, label, .hint { display: none !important; } .report-box { display: block !important; border: 1px solid #ccc; } }
   </style>
 </head>
@@ -110,24 +110,19 @@
 
       <div class="section">
         <div class="step-box">Paso 3. Análisis de Resultados</div>
-        <div class="grid-4">
+        <div class="metrics">
           <div class="metric">
             <div class="metric-label">Costo Unitario</div>
             <div id="metricCosto" class="metric-value">$0.00</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Ventas Actuales</div>
-            <div id="metricActuales" class="metric-value">0</div>
-            <div class="metric-delta">Volumen base</div>
+            <div class="metric-label">Nuevo Margen Bruto</div>
+            <div id="metricMargen" class="metric-value">0%</div>
           </div>
           <div class="metric">
             <div class="metric-label">Meta Unidades</div>
             <div id="metricUnidades" class="metric-value">0</div>
             <div id="metricVariacion" class="metric-delta">0% Vol.</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Nuevo Margen Bruto</div>
-            <div id="metricMargen" class="metric-value">0%</div>
           </div>
         </div>
         
@@ -147,14 +142,13 @@
         
         <div class="summary-grid">
           <div class="metric">
-            <div class="metric-label">Ventas Actuales (Base)</div>
-            <div id="impactUnitsActual" class="metric-value">0</div>
-            <div class="metric-delta">Unidades sin ajustar</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Nueva Meta Requerida</div>
+            <div class="metric-label">Meta Requerida</div>
             <div id="impactUnits" class="metric-value">0</div>
             <div id="impactVariation" class="metric-delta">0% vs base</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Utilidad a Preservar</div>
+            <div id="impactUb" class="metric-value">$0.00</div>
           </div>
         </div>
 
@@ -185,11 +179,9 @@
       producto: $("producto"), precioActual: $("precioActual"), unidadesActuales: $("unidadesActuales"),
       margenActual: $("margenActual"), nuevoPrecio: $("nuevoPrecio"), autorReporte: $("autorReporte"),
       metricCosto: $("metricCosto"), metricMargen: $("metricMargen"), metricUnidades: $("metricUnidades"),
-      metricActuales: $("metricActuales"), // Nueva referencia
       metricVariacion: $("metricVariacion"), diagnostico: $("diagnostico"), statusBox: $("statusBox"), 
-      reportBox: $("reportBox"), reportAutor: $("reportAutor"), 
-      impactUnits: $("impactUnits"), impactUnitsActual: $("impactUnitsActual"), // Nueva referencia reporte
-      impactVariation: $("impactVariation"), impactUb: $("impactUb"), 
+      reportBox: $("reportBox"), headlineBox: $("headlineBox"), reportAutor: $("reportAutor"), 
+      impactUnits: $("impactUnits"), impactVariation: $("impactVariation"), impactUb: $("impactUb"), 
       strategyLimitBox: $("strategyLimitBox"), diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), 
       sumProducto: $("sumProducto"), sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), 
       sumMargenNuevo: $("sumMargenNuevo"), sumUnidades: $("sumUnidades"), sumMeta: $("sumMeta")
@@ -223,13 +215,14 @@
     function updateAll() {
       const d = computeModel();
       
+      // Actualizar Métricas Principales
       els.metricCosto.textContent = fmtMoney(d.costo);
       els.metricMargen.textContent = d.mNew.toFixed(2) + "%";
       els.metricUnidades.textContent = fmtUnits(d.qNec);
-      els.metricActuales.textContent = fmtUnits(d.qAct); // Mostrar unidades actuales
       
+      // Actualizar % de Variación debajo de unidades
       els.metricVariacion.textContent = (d.varVol >= 0 ? "+" : "") + d.varVol.toFixed(2) + "% Vol.";
-      els.metricVariacion.style.color = d.varVol > 20 ? "#b91c1c" : "#6b7280";
+      els.metricVariacion.style.color = d.varVol > 20 ? "#b91c1c" : "#6b7280"; // Rojo si es > 20%
 
       if (d.pNew <= d.costo) {
         els.diagnostico.innerHTML = `<div class="band danger"><strong>🔴 Destrucción de Valor:</strong> El nuevo precio es menor o igual al costo unitario.</div>`;
@@ -247,17 +240,18 @@
       
       els.reportAutor.textContent = d.autor;
       
-      els.impactUnitsActual.textContent = fmtUnits(d.qAct); // Unidades actuales en reporte
-      els.impactUnits.textContent = fmtUnits(d.qNec); // Meta en reporte
+      els.impactUnits.textContent = fmtUnits(d.qNec);
       els.impactVariation.textContent = d.varVol.toFixed(2) + "% de crecimiento necesario";
+      els.impactUb.textContent = fmtMoney(d.utilidadObj);
       
       els.diagnosisBox.className = `band ${color}`;
       els.diagnosisBox.innerHTML = `<strong>Diagnóstico Gerencial:</strong> ${diagText}`;
       
       els.strategyLimitBox.innerHTML = `<strong>Límite Estratégico:</strong> El precio mínimo recomendado es <b>${fmtMoney(d.pLimite)}</b>. Bajar de ahí exige cambios en la estructura de costos.`;
       
-      els.ruleBox.innerHTML = `<strong>Lectura de Negocio:</strong> Para mantener una utilidad de ${fmtMoney(d.utilidadObj)}, el equipo debe pasar de ${fmtUnits(d.qAct)} a ${fmtUnits(d.qNec)} unidades.`;
+      els.ruleBox.innerHTML = `<strong>Lectura de Negocio:</strong> Para mantener una utilidad de ${fmtMoney(d.utilidadObj)}, el equipo debe asegurar la venta de ${fmtUnits(d.qNec)} unidades.`;
 
+      // Ficha Técnica
       els.sumProducto.textContent = d.producto;
       els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);
       els.sumCosto.textContent = fmtMoney(d.costo);
@@ -285,10 +279,12 @@
       setTimeout(() => window.print(), 300);
     };
 
+    // Escuchar cambios en vivo
     [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.producto].forEach(input => {
       input.oninput = updateAll;
     });
 
+    // Inicio
     updateAll();
   </script>
 </body>
