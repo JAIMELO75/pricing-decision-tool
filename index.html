@@ -158,7 +158,6 @@
           </div>
         </div>
 
-        <div id="strategyLimitBox" class="band neutral"></div>
         <div id="diagnosisBox" class="band"></div>
         <div id="ruleBox" class="band neutral"></div>
         
@@ -190,7 +189,7 @@
       reportBox: $("reportBox"), reportAutor: $("reportAutor"), 
       impactUnits: $("impactUnits"), impactUnitsActual: $("impactUnitsActual"), // Nueva referencia reporte
       impactVariation: $("impactVariation"), impactUb: $("impactUb"), 
-      strategyLimitBox: $("strategyLimitBox"), diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), 
+      diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), 
       sumProducto: $("sumProducto"), sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), 
       sumMargenNuevo: $("sumMargenNuevo"), sumUnidades: $("sumUnidades"), sumMeta: $("sumMeta")
     };
@@ -254,8 +253,7 @@
       els.diagnosisBox.className = `band ${color}`;
       els.diagnosisBox.innerHTML = `<strong>Diagnóstico Gerencial:</strong> ${diagText}`;
       
-      els.strategyLimitBox.innerHTML = `<strong>Límite Estratégico:</strong> El precio mínimo recomendado es <b>${fmtMoney(d.pLimite)}</b>. Bajar de ahí exige cambios en la estructura de costos.`;
-      
+    
       els.ruleBox.innerHTML = `<strong>Lectura de Negocio:</strong> Para mantener una utilidad de ${fmtMoney(d.utilidadObj)}, el equipo debe pasar de ${fmtUnits(d.qAct)} a ${fmtUnits(d.qNec)} unidades.`;
 
       els.sumProducto.textContent = d.producto;
