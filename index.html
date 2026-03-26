@@ -192,27 +192,20 @@
         <div id="diagnosisBox" class="band"></div>
         <div id="ruleBox" class="band neutral"></div>
         
-     <h3 style="margin-top:35px; color: #0f766e; border-bottom: 2px solid #0f766e; padding-bottom: 8px;">📋 Resumen Técnico de la Decisión</h3>
-
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
+        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
+<div class="summary-grid">
+  <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
+  <div class="summary-item"><b>Costo Unitario:</b> <span id="sumCosto"></span></div>
   
-  <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
-    <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Escenario Base</p>
-    <div style="margin-bottom: 8px;"><b>💰 Precio:</b> <span id="sumPrecioActual"></span></div>
-    <div style="margin-bottom: 8px;"><b>📉 Margen:</b> <span id="sumMargenActual"></span></div>
-    <div style="margin-bottom: 8px;"><b>👥 Unidades:</b> <span id="sumUnidades"></span></div>
-  </div>
-
-  <div style="background: #f0fdf4; padding: 15px; border-radius: 12px; border: 1px solid #bbf7d0;">
-    <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #166534; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Propuesta Ajustada</p>
-    <div style="margin-bottom: 8px; color: #166534;"><b>🚀 Nuevo Precio:</b> <span id="sumNuevoPrecio" style="font-weight: 800;"></span></div>
-    <div style="margin-bottom: 8px; color: #166534;"><b>📈 Nuevo Margen:</b> <span id="sumMargenNuevo" style="font-weight: 800;"></span></div>
-    <div style="margin-bottom: 8px; color: #166534;"><b>🎯 Meta:</b> <span id="sumMeta" style="font-weight: 800;"></span></div>
-  </div>
-</div>
-
-<div style="margin-top: 15px; background: #f1f5f9; padding: 10px; border-radius: 8px; font-size: 0.9rem;">
-  <b>📦 Producto:</b> <span id="sumProducto"></span> | <b>🧪 Costo Unitario:</b> <span id="sumCosto"></span>
+  <div class="summary-item"><b>Precio Anterior:</b> <span id="sumPrecioActual"></span></div>
+  <div class="summary-item"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio"></span></div>
+  
+  <div class="summary-item"><b>Margen Anterior:</b> <span id="sumMargenActual"></span></div>
+  <div class="summary-item"><b>Margen Nuevo:</b> <span id="sumMargenNuevo"></span></div>
+  
+  <div class="summary-item"><b>Unidades Base:</b> <span id="sumUnidades"></span></div>
+  <div class="summary-item"><b>Meta de Unidades:</b> <span id="sumMeta"></span></div>
 </div>
     </section>
     <div style="text-align: center; margin-top: 30px; color: #7A7A7A; font-size: 13px;">
