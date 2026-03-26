@@ -701,7 +701,106 @@ els.reportBox.style.display = "block";
     els.statusBox.style.display = "none";
   }, 900);
 }
+function renderReport(data) {
+  let headlineClass = "neutral";
+  let decisionText = "";
+  let diagnosisText = "";
 
+  if (data.nuevoPrecio <= data.costoUnitario) {
+    headlineClass = "danger";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Destrucción inmediata de valor`;
+    diagnosisText = "El precio propuesto se ubica igual o por debajo del costo unitario estimado. En este escenario, cada unidad adicional destruye valor.";
+  } else if (data.variacionVol <= 9) {
+    headlineClass = "ok";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Zona óptima`;
+    diagnosisText = "La exigencia de volumen se mantiene dentro del rango orgánico y referente del negocio.";
+  } else if (data.variacionVol <= 18) {
+    headlineClass = "warn";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Viable con gestión`;
+    diagnosisText = "El crecimiento requerido equivale hasta dos veces la referencia orgánica y exige gestión comercial activa.";
+  } else if (data.variacionVol <= 27) {
+    headlineClass = "warn";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Exigente`;
+    diagnosisText = "El crecimiento requerido equivale hasta tres veces la referencia orgánica y demanda un esfuerzo comercial intensivo.";
+  } else {
+    headlineClass = "danger";
+    decisionText = `Decisión de precio: ${fmtMoney(data.nuevoPrecio)} → Estructural`;
+    diagnosisText = "La exigencia de volumen ya no es comercialmente razonable y requiere cambios de fondo en capacidades, canal, mercado o modelo de negocio.";
+  }
+
+  els.headlineBox.className = `band ${headlineClass}`;
+  els.headlineBox.innerHTML = `<strong>${decisionText}</strong>`;
+
+  els.reportAutor.textContent = data.autorReporte;
+  els.impactUnits.textContent = fmtUnits(data.qNecesaria);
+  els.impactVariation.textContent = `${data.variacionVol.toFixed(2)}% vs base actual`;
+  els.impactUb.textContent = fmtMoney(data.utilidadObjetivo);
+
+  els.strategyLimitBox.innerHTML = `
+    <strong>Límite estratégico</strong>
+    Precio mínimo sin entrar en zona estructural: <b>${fmtMoney(data.precioLimiteEstructural)}</b>.<br><br>
+    Por debajo de este nivel, el volumen requerido deja de ser comercialmente razonable y el descuento empieza a exigir más que compromiso: exige cambios de fondo.
+  `;
+
+  els.diagnosisBox.className = `band ${headlineClass}`;
+  els.diagnosisBox.innerHTML = `
+    <strong>Diagnóstico</strong>
+    ${diagnosisText}
+  `;
+
+  if (data.nuevoPrecio <= data.costoUnitario) {
+    els.ruleBox.innerHTML = `
+      <strong>Lectura gerencial</strong>
+      El descuento ya consumió toda la utilidad disponible. No se trata de vender más, sino de evitar profundizar la destrucción de valor.
+    `;
+  } else if (data.variacionVol <= 9) {
+    els.ruleBox.innerHTML = `
+      <strong>Lectura gerencial</strong>
+      La decisión es absorbible dentro de la dinámica orgánica del negocio. Puede ejecutarse con seguimiento normal al cumplimiento.
+    `;
+  } else if (data.variacionVol <= 18) {
+    els.ruleBox.innerHTML = `
+      <strong>Lectura gerencial</strong>
+      La decisión es viable, pero solo si existe gestión comercial activa. El volumen debe revisarse con frecuencia para confirmar que el descuento no erosiona la utilidad.
+    `;
+  } else if (data.variacionVol <= 27) {
+    els.ruleBox.innerHTML = `
+      <strong>Lectura gerencial</strong>
+      La decisión exige compromiso máximo. El negocio ya no puede depender solo de inercia comercial; necesita acciones intensivas para capturar el volumen requerido.
+    `;
+  } else {
+    els.ruleBox.innerHTML = `
+      <strong>Lectura gerencial</strong>
+      Un descuento puede parecer pequeño en el precio, pero si obliga a crecer 25% o 40%, deja de ser comercialmente razonable. Cuidar un negocio se hace desde la utilidad, no desde el valor de la venta.
+    `;
+  }
+
+  els.sumProducto.textContent = data.producto;
+  els.sumNuevoPrecio.textContent = fmtMoney(data.nuevoPrecio);
+  els.sumPrecioActual.textContent = fmtMoney(data.pActual);
+  els.sumCosto.textContent = fmtMoney(data.costoUnitario);
+  els.sumUnidades.textContent = fmtUnits(data.qActual);
+  els.sumMargenNuevo.textContent = `${data.nuevoMargen.toFixed(2)}%`;
+  els.sumMargenActual.textContent = `${data.margenActual.toFixed(2)}%`;
+  els.sumMeta.textContent = fmtUnits(data.qNecesaria);
+
+  els.reportBox.style.display = "block";
+}
+
+function showStatus() {
+  els.statusBox.style.display = "block";
+  els.statusBox.innerHTML = `
+    Calculando punto de indiferencia...<br>
+    Preparando resumen ejecutivo...<br>
+    Generando versión descargable...
+  `;
+}
+
+function hideStatus() {
+  setTimeout(() => {
+    els.statusBox.style.display = "none";
+  }, 900);
+}
     function updateAll() {
       const data = computeModel();
       renderMainMetrics(data);
@@ -710,6 +809,33 @@ els.reportBox.style.display = "block";
     }
 
     function generateReport() {
+  const data = updateAll();
+  showStatus();
+
+  setTimeout(() => {
+    if (data.nuevoPrecio <= data.costoUnitario) {
+      alert("No se puede generar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
+      hideStatus();
+      return;
+    }
+
+    renderReport(data);
+    hideStatus();
+    els.reportBox.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 700);
+}
+
+function downloadPdf() {
+  const data = updateAll();
+
+  if (data.nuevoPrecio <= data.costoUnitario) {
+    alert("No se puede descargar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
+    return;
+  }
+
+  renderReport(data);
+  setTimeout(() => window.print(), 120);
+}
       const data = updateAll();
       showStatus();
 
@@ -726,7 +852,34 @@ els.reportBox.style.display = "block";
       }, 700);
     }
 
-    function downloadPdf() {
+function generateReport() {
+  const data = updateAll();
+  showStatus();
+
+  setTimeout(() => {
+    if (data.nuevoPrecio <= data.costoUnitario) {
+      alert("No se puede generar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
+      hideStatus();
+      return;
+    }
+
+    renderReport(data);
+    hideStatus();
+    els.reportBox.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 700);
+}
+
+function downloadPdf() {
+  const data = updateAll();
+
+  if (data.nuevoPrecio <= data.costoUnitario) {
+    alert("No se puede descargar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
+    return;
+  }
+
+  renderReport(data);
+  setTimeout(() => window.print(), 120);
+}
       const data = updateAll();
       if (data.nuevoPrecio <= data.costoUnitario) {
         alert("No se puede descargar un reporte válido porque el nuevo precio no deja utilidad bruta positiva.");
