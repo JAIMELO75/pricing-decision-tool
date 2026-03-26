@@ -78,7 +78,20 @@
     .summary-item { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
 
     @media (max-width: 768px) { .grid-2, .grid-4, .summary-grid { grid-template-columns: 1fr; } .cta-row { flex-direction: column; } }
-    @media print { .hero, .cta-row, .status, .step-box, .input, label, .hint { display: none !important; } .report-box { display: block !important; border: 1px solid #ccc; } }
+    @media print {
+  @page { size: portrait; margin: 1cm; } /* Define márgenes de hoja */
+  body { background: white !important; }
+  .hero, .cta-row, .status, .step-box, .input, label, .hint, .section:not(.printable) { 
+    display: none !important; 
+  }
+  .shell { padding: 0; max-width: 100%; }
+  .report-box { 
+    display: block !important; 
+    border: none !important; /* Quitamos bordes externos para limpieza */
+    padding: 0; 
+    page-break-inside: avoid; /* Evita que se corte a la mitad de una tabla */
+  }
+}
   </style>
 </head>
 <body>
