@@ -12,9 +12,7 @@
       --muted: #6b7280;
       --line: #e5e7eb;
       --primary: #0f766e;
-      --primary-soft: #dff7f3;
       --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-      --radius: 18px;
     }
 
     * { box-sizing: border-box; }
@@ -52,7 +50,6 @@
     .field label { font-size: 14px; font-weight: 700; }
     .input { width: 100%; border: 1px solid #d1d5db; border-radius: 14px; padding: 14px; font-size: 16px; outline: none; }
     .input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(15,118,110,0.1); }
-    .hint { color: var(--muted); font-size: 12px; }
 
     .metric { border: 1px solid var(--line); border-radius: 18px; padding: 16px; background: #fff; }
     .metric-label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
@@ -67,85 +64,77 @@
 
     .cta-row { display: flex; gap: 12px; margin-top: 18px; }
     .btn { border: 0; border-radius: 14px; padding: 14px 20px; font-weight: 800; cursor: pointer; transition: transform 0.1s; display: flex; align-items: center; gap: 8px; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(15,118,110,0.2); }
+    .btn-primary { background: var(--primary); color: white; }
     .btn-secondary { background: #eef2f7; color: #334155; border: 1px solid #dbe3ee; }
 
-    .status { display: none; margin-top: 14px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 16px; color: #475569; font-size: 14px; }
+    .status { display: none; margin-top: 14px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 16px; }
     .report-box { display: none; margin-top: 20px; padding: 28px; border: 1px solid #d7e2da; border-left: 8px solid #2E7D32; border-radius: 18px; background: #fff; }
     
     .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 15px; }
     .summary-item { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
 
-    @media (max-width: 768px) { .grid-2, .grid-4, .summary-grid { grid-template-columns: 1fr; } .cta-row { flex-direction: column; } }
+    /* --- CONFIGURACIÓN PARA PDF PERFECTO --- */
     @media print {
-  @page { size: portrait; margin: 1cm; } /* Define márgenes de hoja */
-  body { background: white !important; }
-  .hero, .cta-row, .status, .step-box, .input, label, .hint, .section:not(.printable) { 
-    display: none !important; 
-  }
-  .shell { padding: 0; max-width: 100%; }
-  .report-box { 
-    display: block !important; 
-    border: none !important; /* Quitamos bordes externos para limpieza */
-    padding: 0; 
-    page-break-inside: avoid; /* Evita que se corte a la mitad de una tabla */
-  }
-}
+      @page { size: portrait; margin: 1cm; }
+      body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .hero, .cta-row, .status, .step-box, .input, label, .hint, .section:not(.printable), .grid-2, .grid-4, .metrics, #diagnostico { 
+        display: none !important; 
+      }
+      .shell { padding: 0; max-width: 100%; margin: 0; }
+      .card { border: none !important; box-shadow: none !important; background: transparent !important; }
+      .report-box { 
+        display: block !important; 
+        border: none !important; 
+        padding: 0; 
+        margin: 0;
+        width: 100%;
+      }
+      .metric, .band, div[style*="background"] {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="shell">
     <section class="hero">
-      <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; opacity: 0.8;">Herramienta Estratégica</div>
       <h1>Simulador de Punto de Indiferencia</h1>
-      <p>Determina el volumen necesario para absorber cambios de precio sin sacrificar utilidad bruta.</p>
+      <p>Determina el volumen necesario para bajar precios sin perder utilidad bruta.</p>
     </section>
 
     <section class="card">
       <div class="section">
-        <div class="step-box">Paso 1. Datos actuales del producto</div>
+        <div class="step-box">Paso 1. Datos actuales</div>
         <div class="grid-2">
-          <div class="field"><label>Producto o Categoría</label><input id="producto" class="input" type="text" value="Cualquier producto" /></div>
-          <div class="field"><label>Precio de Venta Actual</label><input id="precioActual" class="input" type="number" step="0.01" value="10.00" /></div>
-          <div class="field"><label>Unidades Vendidas Actuales</label><input id="unidadesActuales" class="input" type="number" value="3000" /></div>
+          <div class="field"><label>Producto</label><input id="producto" class="input" type="text" value="Cualquier producto" /></div>
+          <div class="field"><label>Precio Venta Actual</label><input id="precioActual" class="input" type="number" step="0.01" value="10.00" /></div>
+          <div class="field"><label>Unidades Actuales</label><input id="unidadesActuales" class="input" type="number" value="3000" /></div>
           <div class="field"><label>Margen Bruto Actual (%)</label><input id="margenActual" class="input" type="number" step="0.1" value="26.0" /></div>
         </div>
       </div>
 
       <div class="section">
-        <div class="step-box">Paso 2. Nuevo Escenario Propuesto</div>
+        <div class="step-box">Paso 2. Nuevo Escenario</div>
         <div class="grid-2">
-          <div class="field"><label>Nuevo Precio Propuesto</label><input id="nuevoPrecio" class="input" type="number" step="0.01" value="9.50" /></div>
-          <div class="field"><label>Firma del Reporte</label><input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" /></div>
+          <div class="field"><label>Nuevo Precio</label><input id="nuevoPrecio" class="input" type="number" step="0.01" value="9.50" /></div>
+          <div class="field"><label>Firma</label><input id="autorReporte" class="input" type="text" value="Desarrollado por Jaime Loaiza" /></div>
         </div>
       </div>
 
       <div class="section">
-        <div class="step-box">Paso 3. Análisis de Resultados</div>
+        <div class="step-box">Paso 3. Análisis en tiempo real</div>
         <div class="grid-4">
-          <div class="metric">
-            <div class="metric-label">Costo Unitario</div>
-            <div id="metricCosto" class="metric-value">$0.00</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Ventas Actuales</div>
-            <div id="metricActuales" class="metric-value">0</div>
-            <div class="metric-delta">Volumen base</div>
-          </div>
+          <div class="metric"><div class="metric-label">Costo Unitario</div><div id="metricCosto" class="metric-value">$0.00</div></div>
+          <div class="metric"><div class="metric-label">Ventas Actuales</div><div id="metricActuales" class="metric-value">0</div></div>
           <div class="metric">
             <div class="metric-label">Meta Unidades</div>
             <div id="metricUnidades" class="metric-value">0</div>
             <div id="metricVariacion" class="metric-delta">0% Vol.</div>
           </div>
-          <div class="metric">
-            <div class="metric-label">Nuevo Margen Bruto</div>
-            <div id="metricMargen" class="metric-value">0%</div>
-          </div>
+          <div class="metric"><div class="metric-label">Nuevo Margen</div><div id="metricMargen" class="metric-value">0%</div></div>
         </div>
-        
         <div id="diagnostico"></div>
-        
         <div class="cta-row">
           <button class="btn btn-primary" id="btnGenerar">📄 Generar reporte gerencial</button>
           <button class="btn btn-secondary" id="btnDescargar">⬇️ Descargar reporte en PDF</button>
@@ -154,59 +143,43 @@
       </div>
 
       <div id="reportBox" class="report-box">
-        <h2 style="margin-top:10px; color: #0f766e; border-bottom: 3px solid #0f766e; padding-bottom: 10px;">📊 Reporte Gerencial: Punto de Indiferencia</h2>
+        <h2 style="margin-top:0; color: #0f766e; border-bottom: 3px solid #0f766e; padding-bottom: 10px;">📊 Reporte Gerencial: Punto de Indiferencia</h2>
         <div id="reportAutor" style="font-weight:800; color:var(--muted); font-size: 14px; margin-top: 5px;"></div>
         
-        <div class="summary-grid" style="margin-top: 25px;">
-          <div class="metric" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+        <div class="summary-grid" style="margin-top: 20px;">
+          <div class="metric" style="background-color: #f8fafc !important; border: 1px solid #e2e8f0 !important;">
             <div class="metric-label">Ventas Actuales (Base)</div>
             <div id="impactUnitsActual" class="metric-value" style="color: #475569;">0</div>
-            <div class="metric-delta">Situación inicial</div>
           </div>
-          <div class="metric" style="background-color: #f0fdf4; border: 1px solid #bbf7d0;">
+          <div class="metric" style="background-color: #f0fdf4 !important; border: 1px solid #bbf7d0 !important;">
             <div class="metric-label" style="color: #166534;">Nueva Meta Requerida</div>
             <div id="impactUnits" class="metric-value" style="color: #166534;">0</div>
-            <div id="impactVariation" class="metric-delta" style="color: #15803d;">0% de crecimiento</div>
+            <div id="impactVariation" class="metric-delta" style="color: #15803d;">0% de incremento</div>
           </div>
         </div>
 
-        <div id="diagnosisBox" class="band" style="font-size: 16px; padding: 20px;"></div>
-        <div id="ruleBox" class="band neutral" style="border-left: 5px solid #64748b; background-color: #f1f5f9;"></div>
+        <div id="diagnosisBox" class="band" style="font-size: 16px; padding: 15px; margin-top: 15px;"></div>
+        <div id="ruleBox" class="band neutral" style="border-left: 5px solid #64748b; background-color: #f1f5f9 !important; margin-top: 10px;"></div>
         
-        <h3 style="margin-top:35px; color: #334155; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">📋 Resumen Técnico Comparativo</h3>
-        <div class="summary-grid">
-          <div class="summary-item"><b>📦 Producto:</b> <br><span id="sumProducto"></span></div>
-          <div class="summary-item"><b>🧪 Costo Unitario:</b> <br><span id="sumCosto"></span></div>
-          
-          <div class="summary-item" style="border-left: 3px solid #cbd5e1; padding-left: 10px;"><b>💰 Precio Anterior:</b> <br><span id="sumPrecioActual"></span></div>
-          <div class="summary-item" style="border-left: 3px solid #0f766e; padding-left: 10px; color: #0f766e;"><b>🚀 Nuevo Precio:</b> <br><span id="sumNuevoPrecio" style="font-weight: bold;"></span></div>
-          
-          <div class="summary-item" style="border-left: 3px solid #cbd5e1; padding-left: 10px;"><b>📉 Margen Anterior:</b> <br><span id="sumMargenActual"></span></div>
-          <div class="summary-item" style="border-left: 3px solid #0f766e; padding-left: 10px; color: #0f766e;"><b>📈 Margen Nuevo:</b> <br><span id="sumMargenNuevo" style="font-weight: bold;"></span></div>
-          
-          <div class="summary-item" style="border-left: 3px solid #cbd5e1; padding-left: 10px;"><b>👥 Unidades Base:</b> <br><span id="sumUnidades"></span></div>
-          <div class="summary-item" style="border-left: 3px solid #0f766e; padding-left: 10px; color: #0f766e;"><b>🎯 Meta de Unidades:</b> <br><span id="sumMeta" style="font-weight: bold;"></span></div>
+        <h3 style="margin-top:30px; color: #334155; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">📋 Ficha Técnica de Comparación</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+          <div style="background: #f8fafc !important; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0;">
+            <p style="margin: 0 0 8px 0; font-size: 0.75rem; color: #64748b; font-weight: bold; text-transform: uppercase;">Escenario Actual</p>
+            <div style="margin-bottom: 5px;"><b>Precio:</b> <span id="sumPrecioActual"></span></div>
+            <div style="margin-bottom: 5px;"><b>Margen:</b> <span id="sumMargenActual"></span></div>
+            <div><b>Unidades:</b> <span id="sumUnidades"></span></div>
+          </div>
+          <div style="background: #f0fdf4 !important; padding: 12px; border-radius: 10px; border: 1px solid #bbf7d0;">
+            <p style="margin: 0 0 8px 0; font-size: 0.75rem; color: #166534; font-weight: bold; text-transform: uppercase;">Meta Propuesta</p>
+            <div style="margin-bottom: 5px; color: #166534;"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio" style="font-weight: bold;"></span></div>
+            <div style="margin-bottom: 5px; color: #166534;"><b>Nuevo Margen:</b> <span id="sumMargenNuevo" style="font-weight: bold;"></span></div>
+            <div style="color: #166534;"><b>Meta:</b> <span id="sumMeta" style="font-weight: bold;"></span></div>
+          </div>
+        </div>
+        <div style="margin-top: 15px; font-size: 0.85rem; color: #64748b; text-align: right; border-top: 1px solid #eee; padding-top: 10px;">
+          <b>Producto:</b> <span id="sumProducto"></span> | <b>Costo Unitario:</b> <span id="sumCosto"></span>
         </div>
       </div>
-
-        <div id="diagnosisBox" class="band"></div>
-        <div id="ruleBox" class="band neutral"></div>
-        
-        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
-        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
-<div class="summary-grid">
-  <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
-  <div class="summary-item"><b>Costo Unitario:</b> <span id="sumCosto"></span></div>
-  
-  <div class="summary-item"><b>Precio Anterior:</b> <span id="sumPrecioActual"></span></div>
-  <div class="summary-item"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio"></span></div>
-  
-  <div class="summary-item"><b>Margen Anterior:</b> <span id="sumMargenActual"></span></div>
-  <div class="summary-item"><b>Margen Nuevo:</b> <span id="sumMargenNuevo"></span></div>
-  
-  <div class="summary-item"><b>Unidades Base:</b> <span id="sumUnidades"></span></div>
-  <div class="summary-item"><b>Meta de Unidades:</b> <span id="sumMeta"></span></div>
-</div>
     </section>
     <div style="text-align: center; margin-top: 30px; color: #7A7A7A; font-size: 13px;">
       Simulador de Punto de Indiferencia | Developed by Jaime Loaiza
@@ -216,20 +189,16 @@
   <script>
     const $ = (id) => document.getElementById(id);
 
-   const els = {
+    const els = {
       producto: $("producto"), precioActual: $("precioActual"), unidadesActuales: $("unidadesActuales"),
       margenActual: $("margenActual"), nuevoPrecio: $("nuevoPrecio"), autorReporte: $("autorReporte"),
       metricCosto: $("metricCosto"), metricMargen: $("metricMargen"), metricUnidades: $("metricUnidades"),
-      metricActuales: $("metricActuales"), 
-      metricVariacion: $("metricVariacion"), diagnostico: $("diagnostico"), statusBox: $("statusBox"), 
-      reportBox: $("reportBox"), reportAutor: $("reportAutor"), 
-      impactUnits: $("impactUnits"), impactUnitsActual: $("impactUnitsActual"), 
-      impactVariation: $("impactVariation"), impactUb: $("impactUb"), 
-      diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), 
-      sumProducto: $("sumProducto"), sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), 
-      sumMargenNuevo: $("sumMargenNuevo"), sumUnidades: $("sumUnidades"), sumMeta: $("sumMeta"),
-      // ESTAS SON LAS DOS QUE FALTA AGREGAR:
-      sumPrecioActual: $("sumPrecioActual"), 
+      metricActuales: $("metricActuales"), metricVariacion: $("metricVariacion"), diagnostico: $("diagnostico"),
+      statusBox: $("statusBox"), reportBox: $("reportBox"), reportAutor: $("reportAutor"),
+      impactUnits: $("impactUnits"), impactUnitsActual: $("impactUnitsActual"), impactVariation: $("impactVariation"),
+      diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), sumProducto: $("sumProducto"),
+      sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), sumMargenNuevo: $("sumMargenNuevo"),
+      sumUnidades: $("sumUnidades"), sumMeta: $("sumMeta"), sumPrecioActual: $("sumPrecioActual"), 
       sumMargenActual: $("sumMargenActual")
     };
 
@@ -241,99 +210,51 @@
       const qAct = Number(els.unidadesActuales.value);
       const mAct = Number(els.margenActual.value) / 100;
       const pNew = Number(els.nuevoPrecio.value);
-
       const costo = pAct * (1 - mAct);
-      const utilidadObj = qAct * (pAct - costo);
       const gananciaNew = pNew - costo;
-      
-      let qNec = gananciaNew > 0 ? utilidadObj / gananciaNew : 0;
-      let varVol = qAct > 0 ? ((qNec / qAct) - 1) * 100 : 0;
-      let mNew = pNew > 0 ? ((pNew - costo) / pNew) * 100 : 0;
-
+      const qNec = gananciaNew > 0 ? (qAct * (pAct - costo)) / gananciaNew : 0;
       return {
         producto: els.producto.value, pAct, qAct, mAct: mAct * 100, pNew,
-        costo, utilidadObj, qNec, varVol, mNew,
-        autor: els.autorReporte.value,
-        pLimite: (utilidadObj / (qAct * 1.22)) + costo 
+        costo, qNec, varVol: qAct > 0 ? ((qNec / qAct) - 1) * 100 : 0,
+        mNew: pNew > 0 ? ((pNew - costo) / pNew) * 100 : 0, autor: els.autorReporte.value
       };
     }
 
     function updateAll() {
       const d = computeModel();
-      
       els.metricCosto.textContent = fmtMoney(d.costo);
       els.metricMargen.textContent = d.mNew.toFixed(2) + "%";
       els.metricUnidades.textContent = fmtUnits(d.qNec);
-      els.metricActuales.textContent = fmtUnits(d.qAct); // Mostrar unidades actuales
-      
+      els.metricActuales.textContent = fmtUnits(d.qAct);
       els.metricVariacion.textContent = (d.varVol >= 0 ? "+" : "") + d.varVol.toFixed(2) + "% Vol.";
       els.metricVariacion.style.color = d.varVol > 20 ? "#b91c1c" : "#6b7280";
-
-      if (d.pNew <= d.costo) {
-        els.diagnostico.innerHTML = `<div class="band danger"><strong>🔴 Destrucción de Valor:</strong> El nuevo precio es menor o igual al costo unitario.</div>`;
-      } else if (d.varVol > 25) {
-        els.diagnostico.innerHTML = `<div class="band danger"><strong>🟠 Riesgo Alto:</strong> Requiere un incremento de volumen del ${d.varVol.toFixed(1)}% para no perder dinero.</div>`;
-      } else {
-        els.diagnostico.innerHTML = `<div class="band ok"><strong>🟢 Escenario Calculado:</strong> Los datos están listos para el reporte.</div>`;
-      }
       return d;
     }
 
     function renderReport(d) {
-      let color = d.varVol > 20 ? "danger" : d.varVol > 10 ? "warn" : "ok";
-      let diagText = d.varVol > 20 ? "Exigencia estructural. Difícil de alcanzar orgánicamente." : "Viable con gestión comercial activa.";
-      
+      let color = d.varVol > 20 ? "danger" : "ok";
       els.reportAutor.textContent = d.autor;
-      
-      els.impactUnitsActual.textContent = fmtUnits(d.qAct); // Unidades actuales en reporte
-      els.impactUnits.textContent = fmtUnits(d.qNec); // Meta en reporte
+      els.impactUnitsActual.textContent = fmtUnits(d.qAct);
+      els.impactUnits.textContent = fmtUnits(d.qNec);
       els.impactVariation.textContent = d.varVol.toFixed(2) + "% de crecimiento necesario";
-      
       els.diagnosisBox.className = `band ${color}`;
-      els.diagnosisBox.innerHTML = `<strong>Diagnóstico Gerencial:</strong> ${diagText}`;
+      els.diagnosisBox.innerHTML = `<strong>Diagnóstico:</strong> ${d.varVol > 20 ? "Exigencia estructural." : "Viable con gestión comercial."}`;
+      els.ruleBox.innerHTML = `<strong>Análisis:</strong> Pasar de ${fmtUnits(d.qAct)} a ${fmtUnits(d.qNec)} unidades para mantener utilidad.`;
       
-    
-      els.ruleBox.innerHTML = `<strong>Lectura de Negocio:</strong> Para mantener una utilidad de ${fmtMoney(d.utilidadObj)}, el equipo debe pasar de ${fmtUnits(d.qAct)} a ${fmtUnits(d.qNec)} unidades.`;
-
-     // Llenado de Ficha Técnica Comparativa (Lo que verá el gerente)
-els.sumProducto.textContent = d.producto;
-els.sumCosto.textContent = fmtMoney(d.costo);
-
-// Comparativa de Precios
-els.sumPrecioActual.textContent = fmtMoney(d.pAct); // Precio Anterior
-els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);  // Nuevo Precio
-
-// Comparativa de Márgenes
-els.sumMargenActual.textContent = d.mAct.toFixed(2) + "%"; // Margen Anterior
-els.sumMargenNuevo.textContent = d.mNew.toFixed(2) + "%";   // Nuevo Margen
-
-// Comparativa de Unidades
-els.sumUnidades.textContent = fmtUnits(d.qAct); // Unidades Base
-els.sumMeta.textContent = fmtUnits(d.qNec);     // Meta de Unidades
+      els.sumProducto.textContent = d.producto;
+      els.sumCosto.textContent = fmtMoney(d.costo);
+      els.sumPrecioActual.textContent = fmtMoney(d.pAct);
+      els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);
+      els.sumMargenActual.textContent = d.mAct.toFixed(2) + "%";
+      els.sumMargenNuevo.textContent = d.mNew.toFixed(2) + "%";
+      els.sumUnidades.textContent = fmtUnits(d.qAct);
+      els.sumMeta.textContent = fmtUnits(d.qNec);
       els.reportBox.style.display = "block";
     }
 
-    $("btnGenerar").onclick = () => {
-      const d = updateAll();
-      els.statusBox.style.display = "block";
-      els.statusBox.innerHTML = "Analizando elasticidad y procesando reporte...";
-      setTimeout(() => {
-        renderReport(d);
-        els.statusBox.style.display = "none";
-        els.reportBox.scrollIntoView({ behavior: "smooth" });
-      }, 700);
-    };
-
-    $("btnDescargar").onclick = () => {
-      const d = updateAll();
-      renderReport(d);
-      setTimeout(() => window.print(), 300);
-    };
-
-    [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.producto].forEach(input => {
-      input.oninput = updateAll;
-    });
-
+    $("btnGenerar").onclick = () => { renderReport(updateAll()); els.reportBox.scrollIntoView({ behavior: "smooth" }); };
+    $("btnDescargar").onclick = () => { renderReport(updateAll()); setTimeout(() => window.print(), 400); };
+    [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio].forEach(i => i.oninput = updateAll);
     updateAll();
   </script>
 </body>
