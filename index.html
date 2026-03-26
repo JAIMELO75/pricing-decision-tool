@@ -162,25 +162,19 @@
         <div id="ruleBox" class="band neutral"></div>
         
         <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
-        <h3 style="margin-top:30px;">Resumen Técnico del Escenario</h3>
 <div class="summary-grid">
-  <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
-  <div class="summary-item"><b>Costo Unitario:</b> <span id="sumCosto"></span></div>
-  
-  <div class="summary-item"><b>Precio Anterior:</b> <span id="sumPrecioActual"></span></div>
-  <div class="summary-item"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio"></span></div>
-  
-  <div class="summary-item"><b>Margen Anterior:</b> <span id="sumMargenActual"></span></div>
-  <div class="summary-item"><b>Margen Nuevo:</b> <span id="sumMargenNuevo"></span></div>
-  
-  <div class="summary-item"><b>Unidades Base:</b> <span id="sumUnidades"></span></div>
-  <div class="summary-item"><b>Meta de Unidades:</b> <span id="sumMeta"></span></div>
+    <div class="summary-item"><b>Producto:</b> <span id="sumProducto"></span></div>
+    <div class="summary-item"><b>Costo Unitario:</b> <span id="sumCosto"></span></div>
+    
+    <div class="summary-item"><b>Precio Anterior:</b> <span id="sumPrecioActual"></span></div>
+    <div class="summary-item"><b>Nuevo Precio:</b> <span id="sumNuevoPrecio"></span></div>
+    
+    <div class="summary-item"><b>Margen Anterior:</b> <span id="sumMargenActual"></span></div>
+    <div class="summary-item"><b>Margen Nuevo:</b> <span id="sumMargenNuevo"></span></div>
+    
+    <div class="summary-item"><b>Unidades Base:</b> <span id="sumUnidades"></span></div>
+    <div class="summary-item"><b>Meta de Unidades:</b> <span id="sumMeta"></span></div>
 </div>
-    </section>
-    <div style="text-align: center; margin-top: 30px; color: #7A7A7A; font-size: 13px;">
-      Simulador de Punto de Indiferencia | Developed by Jaime Loaiza
-    </div>
-  </div>
 
   <script>
     const $ = (id) => document.getElementById(id);
@@ -288,10 +282,21 @@
       setTimeout(() => window.print(), 300);
     };
 
-    [els.precioActual, els.unidadesActuales, els.margenActual, els.nuevoPrecio, els.producto].forEach(input => {
-      input.oninput = updateAll;
-    });
+   // Llenado de Ficha Técnica Comparativa
+els.sumProducto.textContent = d.producto;
+els.sumCosto.textContent = fmtMoney(d.costo);
 
+// Precios
+els.sumPrecioActual.textContent = fmtMoney(d.pAct); // Precio base
+els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);  // Precio ajustado
+
+// Márgenes
+els.sumMargenActual.textContent = d.mAct.toFixed(2) + "%"; // Margen base
+els.sumMargenNuevo.textContent = d.mNew.toFixed(2) + "%";   // Margen ajustado
+
+// Unidades
+els.sumUnidades.textContent = fmtUnits(d.qAct); // Unidades actuales
+els.sumMeta.textContent = fmtUnits(d.qNec);     // Nueva meta
     updateAll();
   </script>
 </body>
