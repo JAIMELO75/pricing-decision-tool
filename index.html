@@ -185,18 +185,21 @@
   <script>
     const $ = (id) => document.getElementById(id);
 
-    const els = {
+   const els = {
       producto: $("producto"), precioActual: $("precioActual"), unidadesActuales: $("unidadesActuales"),
       margenActual: $("margenActual"), nuevoPrecio: $("nuevoPrecio"), autorReporte: $("autorReporte"),
       metricCosto: $("metricCosto"), metricMargen: $("metricMargen"), metricUnidades: $("metricUnidades"),
-      metricActuales: $("metricActuales"), // Nueva referencia
+      metricActuales: $("metricActuales"), 
       metricVariacion: $("metricVariacion"), diagnostico: $("diagnostico"), statusBox: $("statusBox"), 
       reportBox: $("reportBox"), reportAutor: $("reportAutor"), 
-      impactUnits: $("impactUnits"), impactUnitsActual: $("impactUnitsActual"), // Nueva referencia reporte
+      impactUnits: $("impactUnits"), impactUnitsActual: $("impactUnitsActual"), 
       impactVariation: $("impactVariation"), impactUb: $("impactUb"), 
       diagnosisBox: $("diagnosisBox"), ruleBox: $("ruleBox"), 
       sumProducto: $("sumProducto"), sumNuevoPrecio: $("sumNuevoPrecio"), sumCosto: $("sumCosto"), 
-      sumMargenNuevo: $("sumMargenNuevo"), sumUnidades: $("sumUnidades"), sumMeta: $("sumMeta")
+      sumMargenNuevo: $("sumMargenNuevo"), sumUnidades: $("sumUnidades"), sumMeta: $("sumMeta"),
+      // ESTAS SON LAS DOS QUE FALTA AGREGAR:
+      sumPrecioActual: $("sumPrecioActual"), 
+      sumMargenActual: $("sumMargenActual")
     };
 
     const fmtMoney = (v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(v);
@@ -261,13 +264,21 @@
     
       els.ruleBox.innerHTML = `<strong>Lectura de Negocio:</strong> Para mantener una utilidad de ${fmtMoney(d.utilidadObj)}, el equipo debe pasar de ${fmtUnits(d.qAct)} a ${fmtUnits(d.qNec)} unidades.`;
 
-      els.sumProducto.textContent = d.producto;
-      els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);
-      els.sumCosto.textContent = fmtMoney(d.costo);
-      els.sumMargenNuevo.textContent = d.mNew.toFixed(2) + "%";
-      els.sumUnidades.textContent = fmtUnits(d.qAct);
-      els.sumMeta.textContent = fmtUnits(d.qNec);
+     // Llenado de Ficha Técnica Comparativa (Lo que verá el gerente)
+els.sumProducto.textContent = d.producto;
+els.sumCosto.textContent = fmtMoney(d.costo);
 
+// Comparativa de Precios
+els.sumPrecioActual.textContent = fmtMoney(d.pAct); // Precio Anterior
+els.sumNuevoPrecio.textContent = fmtMoney(d.pNew);  // Nuevo Precio
+
+// Comparativa de Márgenes
+els.sumMargenActual.textContent = d.mAct.toFixed(2) + "%"; // Margen Anterior
+els.sumMargenNuevo.textContent = d.mNew.toFixed(2) + "%";   // Nuevo Margen
+
+// Comparativa de Unidades
+els.sumUnidades.textContent = fmtUnits(d.qAct); // Unidades Base
+els.sumMeta.textContent = fmtUnits(d.qNec);     // Meta de Unidades
       els.reportBox.style.display = "block";
     }
 
